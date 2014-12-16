@@ -20,6 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from gi.repository import Gtk, Vte, GLib, Gdk, GdkX11, GObject
 import os
+import re
 
 from preferences import Preferences
 from config import ConfigManager
@@ -156,7 +157,13 @@ class VteObject(Gtk.VBox):
         if (not progname):
             progname = ConfigManager.get_conf('general', 'start_shell_program')
         self.progname = progname
-        self.pid = self.vte.fork_command_full(
+
+        if hasattr(self.vte, 'fork_command_full'):
+            fork = self.vte.fork_command_full
+        else:
+            fork = self.vte.spawn_sync
+
+        self.pid = fork(
             Vte.PtyFlags.DEFAULT,
             self.pwd,
             self.progname.split(),
@@ -218,13 +225,23 @@ class VteObject(Gtk.VBox):
         transparency_value = int(ConfigManager.get_conf('terminal', 'background_transparency'))
         self.vte.set_opacity((100 - transparency_value) / 100.0 * 65535)
 
+        if hasattr(self.vte, 'set_word_chars'):
+            self.vte.set_word_chars(ConfigManager.get_conf('general', 'select_by_word'))
 
-        self.vte.set_word_chars(ConfigManager.get_conf('general', 'select_by_word'))
-
-        self.vte.set_colors(
-            Gdk.color_parse(ConfigManager.get_conf('terminal', 'color_text')),
-            Gdk.color_parse(ConfigManager.get_conf('terminal', 'color_background')),
-            [])
+        try:
+            self.vte.set_colors(
+                Gdk.color_parse(ConfigManager.get_conf('terminal', 'color_text')),
+                Gdk.color_parse(ConfigManager.get_conf('terminal', 'color_background')),
+                [])
+        except:
+            alpha = (100 - transparency_value)/100.0
+            bg = Gdk.RGBA.from_color(Gdk.color_parse(ConfigManager.get_conf('terminal', 'color_background')))
+            m = re.match(r'rgb\((\d+),(\d+),(\d+)\)', Gdk.RGBA.to_string(bg))
+            Gdk.RGBA.parse(bg, 'rgba(' + m.group(1) + ',' + m.group(2) + ',' + m.group(3) + ',' + str(alpha) + ')')
+            self.vte.set_colors(
+                Gdk.RGBA.from_color(Gdk.color_parse(ConfigManager.get_conf('terminal', 'color_text'))),
+                bg,
+                [])
 
         if not ConfigManager.get_conf('terminal', 'use_system_font'):
             self.vte.set_font_from_string(ConfigManager.get_conf('terminal', 'font_name'))
