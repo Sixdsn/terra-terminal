@@ -160,8 +160,10 @@ class VteObject(Gtk.VBox):
 
         if hasattr(self.vte, 'fork_command_full'):
             fork = self.vte.fork_command_full
-        else:
+        elif hasattr(self.vte, 'spawn_sync'):
             fork = self.vte.spawn_sync
+        else:
+            raise Exception('no symbols in libVte to fork program')
 
         self.pid = fork(
             Vte.PtyFlags.DEFAULT,
