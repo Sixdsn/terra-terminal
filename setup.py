@@ -75,10 +75,10 @@ def update_desktop_file(datadir):
 
 class InstallAndUpdateDataDirectory(DistUtilsExtra.auto.install_auto):
     def run(self):
-        values = {'__terra_data_directory__': "'%s'" % (self.install_data + '/share/terra/'),
+        values = {'__terra_data_directory__': "'%s'" % (self.prefix + '/share/terra/'),
                   '__version__': "'%s'" % self.distribution.get_version()}
         previous_values = update_config('terra/config.py', values)
-        update_desktop_file(self.install_data + '/share/terra/')
+        update_desktop_file(self.prefix + '/share/terra/')
         DistUtilsExtra.auto.install_auto.run(self)
         update_config('terra/config.py', previous_values)
         for po in glob.glob (os.path.join (PO_DIR, '*.po')):
