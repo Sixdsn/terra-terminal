@@ -25,3 +25,11 @@ Features to come:
 
 If you want to contribute just checkout and try.
 Feel free to open issues for bug report or new features.
+
+Build and Install:
+```
+$> ./setup.py build
+$> sudo ./setup install
+```
+You might need to specify --prefix=/usr/local on the install command if your version of python installed in /usr/local
+
