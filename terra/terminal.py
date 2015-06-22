@@ -200,7 +200,7 @@ class TerminalWin(Gtk.Window):
         self.btn_fullscreen.connect('clicked', lambda w: self.toggle_fullscreen())
 
         self.connect('destroy', lambda w: self.quit())
-        self.connect('delete-event', lambda w, x: self.delete_event_callback())
+        self.connect('delete-event', lambda w, x: self.quit())
         self.connect('key-press-event', self.on_keypress)
         self.connect('focus-out-event', self.on_window_losefocus)
         self.connect('configure-event', self.on_window_move)
@@ -223,10 +223,6 @@ class TerminalWin(Gtk.Window):
             else:
                 button.set_active(True)
                 break
-
-    def delete_event_callback(self):
-        self.hide()
-        return True
 
     def check_visible(self):
         if (not terra_utils.is_on_visible_screen(self)):
