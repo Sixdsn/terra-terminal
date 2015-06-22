@@ -76,6 +76,7 @@ def update_desktop_file(datadir):
 class InstallAndUpdateDataDirectory(DistUtilsExtra.auto.install_auto):
     def run(self):
         values = {'__terra_data_directory__': "'%s'" % (self.prefix + '/share/terra/'),
+                  '__terra_app_directory__': "'%s'" % (self.prefix + '/share/applications/'),
                   '__version__': "'%s'" % self.distribution.get_version()}
         previous_values = update_config(values)
         update_desktop_file(self.prefix + '/share/terra/')

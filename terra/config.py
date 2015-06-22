@@ -25,6 +25,7 @@ from defaults import ConfigDefaults
 import os
 
 __terra_data_directory__ = '/usr/local/share/terra/'
+__terra_app_directory__ = '/usr/local/share/applications/'
 __version__ = '0.2.0'
 
 class ConfigManager():

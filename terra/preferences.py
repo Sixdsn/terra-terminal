@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 """
 
 from gi.repository import Gtk, Gdk, GdkPixbuf, GdkX11
-from config import ConfigManager
+from config import ConfigManager, __terra_app_directory__
 from i18n import t
 import os
 
@@ -265,7 +265,7 @@ class Preferences():
             ConfigManager.set_conf('general', option, getattr(self, option).get_active())
 
         if (self.run_on_startup.get_active() and not os.path.exists(os.environ['HOME'] + '/.config/autostart/terra.desktop')):
-            os.system('cp /usr/share/applications/terra.desktop ' + os.environ['HOME'] + '/.config/autostart/terra.desktop')
+            os.system('cp ' + __terra_app_directory__ + '/terra.desktop ' + os.environ['HOME'] + '/.config/autostart/terra.desktop')
 
         if (not self.run_on_startup.get_active() and os.path.exists(os.environ['HOME'] + '/.config/autostart/terra.desktop')):
             os.system('rm -f ' + os.environ['HOME'] + '/.config/autostart/terra.desktop')
