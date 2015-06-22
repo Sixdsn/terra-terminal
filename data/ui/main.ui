@@ -133,7 +133,7 @@
           </object>
           <packing>
             <property name="resize">True</property>
-            <property name="shrink">False</property>
+            <property name="shrink">True</property>
           </packing>
         </child>
         <child>
