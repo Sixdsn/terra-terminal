@@ -26,7 +26,7 @@ import os
 
 __terra_data_directory__ = '/usr/local/share/terra/'
 __terra_app_directory__ = '/usr/local/share/applications/'
-__version__ = '0.2.0'
+from terra import (__version__)
 
 class ConfigManager():
     config_dir_path = os.path.join(os.environ['HOME'], '.config', 'terra')

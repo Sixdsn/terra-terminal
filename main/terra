@@ -18,15 +18,16 @@
 import sys
 import os
 
-os.putenv('LIBOVERLAY_SCROLLBAR','0')
+# Add the project root the the PYTHONPATH environment variable.
+ROOT = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+sys.path.append(ROOT)
+
 try:
     from terra import terra_main
-except Exception as e:
-    print "Error Terra library is not installed."
-    print(e)
-    sys.exit(0)
-except:
-    print "Error Terra library is not installed."
-    sys.exit(0)
+except ImportError:
+    sys.exit('ERROR: Terra is not installed properly.')
 
-terra_main.main()
+if __name__ == '__main__':
+    # TODO: Update setup.py to also set LIBOVERLAY_SCROLLBAR.
+    os.putenv('LIBOVERLAY_SCROLLBAR', '0')
+    terra_main.main()
