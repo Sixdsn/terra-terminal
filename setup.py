@@ -143,8 +143,8 @@ def get_command_output(cmd, warn_on_stderr=True, warn_on_return_code=True):
 
 
 ext_sources = [
-    'terra/globalhotkeys/globalhotkeys.c',
-    'terra/globalhotkeys/bind.c',
+    'ext/globalhotkeys/globalhotkeys.c',
+    'ext/globalhotkeys/bind.c',
 ]
 gtk_config = parse_pkg_config('pkg-config', 'gtk+-3.0')
 globalhotkeys = Extension('terra.globalhotkeys', ext_sources, **gtk_config)
