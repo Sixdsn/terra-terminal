@@ -20,7 +20,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from gi.repository import Gtk, Gdk
 
-from config import ConfigManager
+from terra.config import ConfigManager
+
 
 class WinDialog:
     def __init__(self, sender, active_terminal):

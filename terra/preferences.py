@@ -18,13 +18,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 """
 
-from gi.repository import Gtk, Gdk, GdkPixbuf, GdkX11
-from config import ConfigManager, __terra_app_directory__
-from i18n import t
 import os
 
-class Preferences():
+from gi.repository import Gtk, Gdk, GdkPixbuf, GdkX11
 
+from terra.config import ConfigManager, __terra_app_directory__
+from terra.i18n import t
+
+
+class Preferences:
     def __init__(self):
         self.init_ui()
 

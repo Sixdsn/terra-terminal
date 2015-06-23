@@ -19,11 +19,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 """
 
-from config import ConfigManager
-from i18n import t
-from terminal import TerminalWinContainer
-
 import sys
+
+from terra.config import ConfigManager
+from terra.terminal import TerminalWinContainer
 
 Wins = None
 

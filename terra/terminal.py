@@ -19,25 +19,24 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 """
 
-from gi.repository import Gtk, Gdk, GdkPixbuf, GObject, GdkX11
-
-from terra import globalhotkeys
-
-from VteObject import VteObjectContainer, VteObject
-from config import ConfigManager
-from rename_dialog import RenameDialog
-from dbusservice import DbusService
-from i18n import t
-
 import sys
 
-import terra_utils
-import terra_main
+from gi.repository import Gtk, Gdk, GdkPixbuf, GObject, GdkX11
 
-class TerminalWinContainer():
+import terra.globalhotkeys
+import terra.terra_utils as terra_utils
+from terra.config import ConfigManager
+from terra.dbusservice import DbusService
+from terra.i18n import t
+from terra.__main__ import quit_prog, remove_app
+from terra.rename_dialog import RenameDialog
+from terra.VteObject import VteObjectContainer, VteObject
+
+
+class TerminalWinContainer:
     def __init__(self):
-        globalhotkeys.init()
-        self.hotkey = globalhotkeys.GlobalHotkey()
+        terra.globalhotkeys.init()
+        self.hotkey = terra.globalhotkeys.GlobalHotkey()
         self.bind_success = self.hotkey.bind(ConfigManager.get_conf('shortcuts', 'global_key'), lambda w: self.show_hide(), None)
         self.apps = []
         self.old_apps = []
@@ -263,7 +262,7 @@ class TerminalWin(Gtk.Window):
 
             if response != Gtk.ResponseType.YES:
                 return False
-        terra_main.quit_prog()
+        quit_prog()
 
     def save_conf(self, keep=True):
         tabs = str('layout-Tabs-%d'% self.screen_id)
@@ -400,7 +399,7 @@ class TerminalWin(Gtk.Window):
     def quit(self):
         ConfigManager.remove_callback(self.update_ui)
         ConfigManager.save_config()
-        terra_main.remove_app(self)
+        remove_app(self)
         self.destroy()
 
     def on_resize(self, widget, event):

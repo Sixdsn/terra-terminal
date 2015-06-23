@@ -18,20 +18,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 """
 
-from gi.repository import Gtk, Vte, GLib, Gdk, GdkX11, GObject
 import os
 import re
-
-from preferences import Preferences
-from config import ConfigManager
-from terminal_dialog import ProgDialog
-from win_dialog import WinDialog
-from i18n import t
-
 import threading
 
-import terra_utils
-import terra_main
+from gi.repository import Gtk, Vte, GLib, Gdk, GdkX11, GObject
+
+import terra.terra_utils as terra_utils
+from terra.__main__ import create_app, save_conf
+from terra.preferences import Preferences
+from terra.config import ConfigManager
+from terra.terminal_dialog import ProgDialog
+from terra.win_dialog import WinDialog
+from terra.i18n import t
 
 
 # this regex strings taken from pantheon-terminal
@@ -370,10 +369,10 @@ class VteObject(Gtk.VBox):
         self.fork_process(self.progname)
 
     def new_app(self, widget):
-        terra_main.create_app()
+        create_app()
 
     def save_conf(self, widget):
-        terra_main.save_conf()
+        save_conf()
 
     def open_preferences(self, widget):
         ConfigManager.disable_losefocus_temporary = True

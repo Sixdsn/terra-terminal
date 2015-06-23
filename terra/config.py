@@ -18,17 +18,21 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 """
-from gi.repository import Gdk
+
 from base64 import b64encode, b64decode
 import ConfigParser
-from defaults import ConfigDefaults
 import os
+
+from gi.repository import Gdk
+
+from terra import (__version__)
+from terra.defaults import ConfigDefaults
 
 __terra_data_directory__ = '/usr/local/share/terra/'
 __terra_app_directory__ = '/usr/local/share/applications/'
-from terra import (__version__)
 
-class ConfigManager():
+
+class ConfigManager:
     config_dir_path = os.path.join(os.environ['HOME'], '.config', 'terra')
     config_file_path = os.path.join(config_dir_path, 'main.cfg')
 
