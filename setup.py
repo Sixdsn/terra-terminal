@@ -104,7 +104,7 @@ setup(
     zip_safe=False,
     entry_points={
         'console_scripts': [
-            'terra = terra.terra_main:main'
+            'terra = terra.__main__:main'
         ],
     },
     install_requires=[
