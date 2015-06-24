@@ -21,3 +21,6 @@ trim_trailing_whitespace = true
 
 [*.ui]
 indent_size = 2
+
+[Makefile]
+indent_size = 4
