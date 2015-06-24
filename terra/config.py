@@ -29,8 +29,6 @@ from terra import (__version__)
 from terra.defaults import ConfigDefaults
 from terra.handler import TerraHandler
 
-__terra_app_directory__ = '/usr/local/share/applications/'
-
 
 class ConfigManager:
     version = __version__

@@ -22,7 +22,7 @@ import os
 
 from gi.repository import Gtk, Gdk, GdkPixbuf, GdkX11
 
-from terra.config import ConfigManager, __terra_app_directory__
+from terra.config import ConfigManager
 from terra.handler import TerraHandler
 from terra.i18n import t
 
@@ -274,11 +274,12 @@ class Preferences:
         for option in boolean_options:
             ConfigManager.set_conf('general', option, getattr(self, option).get_active())
 
-        if (self.run_on_startup.get_active() and not os.path.exists(os.environ['HOME'] + '/.config/autostart/terra.desktop')):
-            os.system('cp ' + __terra_app_directory__ + '/terra.desktop ' + os.environ['HOME'] + '/.config/autostart/terra.desktop')
-
-        if (not self.run_on_startup.get_active() and os.path.exists(os.environ['HOME'] + '/.config/autostart/terra.desktop')):
-            os.system('rm -f ' + os.environ['HOME'] + '/.config/autostart/terra.desktop')
+        # TODO: Fix "Run on Startup" to work with the packaged application.
+        # if (self.run_on_startup.get_active() and not os.path.exists(os.environ['HOME'] + '/.config/autostart/terra.desktop')):
+        #     os.system('cp ' + __terra_app_directory__ + '/terra.desktop ' + os.environ['HOME'] + '/.config/autostart/terra.desktop')
+        #
+        # if (not self.run_on_startup.get_active() and os.path.exists(os.environ['HOME'] + '/.config/autostart/terra.desktop')):
+        #     os.system('rm -f ' + os.environ['HOME'] + '/.config/autostart/terra.desktop')
 
         ConfigManager.set_conf('general', 'separator_size', int(self.separator_size.get_value()))
 
