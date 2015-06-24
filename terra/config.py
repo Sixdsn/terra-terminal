@@ -27,34 +27,43 @@ from gi.repository import Gdk
 
 from terra import (__version__)
 from terra.defaults import ConfigDefaults
+from terra.handler import TerraHandler
 
-__terra_data_directory__ = '/usr/local/share/terra/'
 __terra_app_directory__ = '/usr/local/share/applications/'
 
 
 class ConfigManager:
-    config_dir_path = os.path.join(os.environ['HOME'], '.config', 'terra')
-    config_file_path = os.path.join(config_dir_path, 'main.cfg')
+    version = __version__
+    config_file_name = 'main.cfg'
 
-    config = ConfigDefaults
-    config.read(config_file_path)
     defaults = ConfigDefaults
+    config = ConfigDefaults
 
     callback_list = []
     use_fake_transparency = False
     disable_losefocus_temporary = False
 
-    data_dir = __terra_data_directory__
-    version = __version__
+    @classmethod
+    def __init__(cls):
+        # Load the user config, if any.
+        config_path = TerraHandler.get_config_path()
+        if os.path.exists(config_path):
+            config_file_path = os.path.join(config_path, cls.config_file_name)
+            if os.path.exists(config_file_path):
+                cls.config.read(config_file_path)
 
-    @staticmethod
-    def init():
-        ConfigParser.SafeConfigParser({})
-        ConfigManager.save_config()
+        # TODO: Remove once the code no longer requires the config files!
+        # Now save the config file.
+        cls.save_config()
 
-    @staticmethod
-    def get_sections():
-        return (ConfigManager.config.sections())
+    @classmethod
+    def get_sections(cls):
+        # TODO: Remove! For some reason, on my setup the `sections()` method
+        # raises a "tuple assignment index out of range" exception.
+        # Reading items from the config seems to solve the issue.
+        cls.config.options('general')
+
+        return cls.config.sections()
 
     @staticmethod
     def get_conf(section, option):
@@ -103,14 +112,16 @@ class ConfigManager:
             print ("[DEBUG] No section '%s'."% (section))
             return
 
-    @staticmethod
-    def save_config():
-        if not os.path.exists(ConfigManager.config_dir_path):
-            os.mkdir(ConfigManager.config_dir_path)
+    @classmethod
+    def save_config(cls):
+        config_path = TerraHandler.get_config_path()
+        if not os.path.exists(config_path):
+            os.mkdir(config_path)
 
-        with open(ConfigManager.config_file_path, 'wb') as configfile:
+        config_file_path = os.path.join(config_path, cls.config_file_name)
+        with open(config_file_path, 'wb') as configfile:
             # @TODO: Only save overridden values?!?
-            ConfigManager.config.write(configfile)
+            cls.config.write(configfile)
 
     @staticmethod
     def add_callback(method):

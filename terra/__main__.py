@@ -19,60 +19,50 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 """
 
+import os
 import sys
 
 from terra.config import ConfigManager
+from terra.handler import TerraHandler
 from terra.terminal import TerminalWinContainer
 
-Wins = None
+# Add the script root the the PYTHONPATH environment variable.
+ROOT = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+sys.path.append(ROOT)
 
-def quit_prog():
-   global Wins
 
-   Wins.app_quit()
+def main(project_root=ROOT):
+    if len(sys.argv) > 1:
+        sys.exit("Terra Doesn't support any argument")
 
-def save_conf():
-    global Wins
+    # Initialize the TerraHandler class variables.
+    TerraHandler(project_root)
+    ConfigManager()  # TODO: Initialization should not be required!
 
-    Wins.save_conf()
-
-def create_app():
-    global Wins
-
-    Wins.create_app()
-
-def remove_app(app):
-    global Wins
-
-    Wins.remove_app(app)
-
-def main():
-    global Wins
-
-    if (len(sys.argv) > 1):
-        print("Terra Doesn't support any argument")
-        return 1
-
-    Wins = TerminalWinContainer()
     try:
-        ConfigManager.init()
+        TerraHandler.Wins = TerminalWinContainer()
+
         for section in ConfigManager.get_sections():
-            if (section.find("layout-screen-") == 0 and (ConfigManager.get_conf(section, 'enabled'))):
-                Wins.create_app(section)
-        if (len(Wins.get_apps()) == 0):
-            Wins.create_app()
-        if (len(Wins.get_apps()) == 0):
-            print("Cannot initiate any screen")
-            return
-    except Exception as excep:
-        print("Exception Catched:")
-        print(excep)
-        Wins.app_quit()
-    except:
-        print("Unknow Exception Catched")
-        Wins.app_quit()
-    else:
-        Wins.start()
+            if section.find('layout-screen-') != 0:
+                continue
+
+            if ConfigManager.get_conf(section, 'enabled'):
+                TerraHandler.Wins.create_app(section)
+
+        if len(TerraHandler.Wins.get_apps()) == 0:
+            TerraHandler.Wins.create_app()
+
+        if len(TerraHandler.Wins.get_apps()) == 0:
+            sys.exit('Cannot initiate any screen')
+
+        TerraHandler.Wins.start()
+
+    except Exception as e:
+        print("Exception: {}".format(e))
+        TerraHandler.Wins.app_quit()
+        sys.exit(1)
+
 
 if __name__ == "__main__":
     main()
+

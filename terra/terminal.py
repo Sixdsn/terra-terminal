@@ -19,6 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 """
 
+import os
 import sys
 
 from gi.repository import Gtk, Gdk, GdkPixbuf, GObject, GdkX11
@@ -27,8 +28,8 @@ import terra.globalhotkeys
 import terra.terra_utils as terra_utils
 from terra.config import ConfigManager
 from terra.dbusservice import DbusService
+from terra.handler import TerraHandler
 from terra.i18n import t
-from terra.__main__ import quit_prog, remove_app
 from terra.rename_dialog import RenameDialog
 from terra.VteObject import VteObjectContainer, VteObject
 
@@ -135,12 +136,19 @@ class TerminalWinContainer:
 
 class TerminalWin(Gtk.Window):
     def __init__(self, name, monitor):
+        main_ui_file = os.path.join(TerraHandler.get_resources_path(), 'ui/main.ui')
+        if not os.path.exists(main_ui_file):
+            msg = 'ERROR: UI data file is missing: {}'.format(main_ui_file)
+            sys.exit(msg)
+
         super(TerminalWin, self).__init__()
 
         self.set_keep_above(True)
+
         self.builder = Gtk.Builder()
         self.builder.set_translation_domain('terra')
-        self.builder.add_from_file(ConfigManager.data_dir + 'ui/main.ui')
+        self.builder.add_from_file(main_ui_file)
+
         self.name = name
         self.screen_id = int(name.split('-')[2])
         ConfigManager.add_callback(self.update_ui)
@@ -175,7 +183,8 @@ class TerminalWin(Gtk.Window):
         self.resizer.connect('button-release-event', self.update_resizer)
 
         self.logo = self.builder.get_object('logo')
-        self.logo_buffer = GdkPixbuf.Pixbuf.new_from_file_at_size(ConfigManager.data_dir  + 'image/terra.svg', 32, 32)
+        logo_path = os.path.join(TerraHandler.get_resources_path(), 'image/terra.svg')
+        self.logo_buffer = GdkPixbuf.Pixbuf.new_from_file_at_size(logo_path, 32, 32)
         self.logo.set_from_pixbuf(self.logo_buffer)
 
         self.set_icon(self.logo_buffer)
@@ -262,7 +271,8 @@ class TerminalWin(Gtk.Window):
 
             if response != Gtk.ResponseType.YES:
                 return False
-        quit_prog()
+
+        TerraHandler.Wins.app_quit()
 
     def save_conf(self, keep=True):
         tabs = str('layout-Tabs-%d'% self.screen_id)
@@ -399,7 +409,7 @@ class TerminalWin(Gtk.Window):
     def quit(self):
         ConfigManager.remove_callback(self.update_ui)
         ConfigManager.save_config()
-        remove_app(self)
+        TerraHandler.Wins.remove_app(self)
         self.destroy()
 
     def on_resize(self, widget, event):

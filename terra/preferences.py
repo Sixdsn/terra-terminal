@@ -23,18 +23,25 @@ import os
 from gi.repository import Gtk, Gdk, GdkPixbuf, GdkX11
 
 from terra.config import ConfigManager, __terra_app_directory__
+from terra.handler import TerraHandler
 from terra.i18n import t
 
 
 class Preferences:
     def __init__(self):
+        # TODO: Only initialize the UI once. Find a way to hide the window.
         self.init_ui()
 
     def init_ui(self):
+        preferences_ui_file = os.path.join(TerraHandler.get_resources_path(), 'ui/preferences.ui')
+        if not os.path.exists(preferences_ui_file):
+            msg = 'ERROR: UI data file is missing: {}'.format(preferences_ui_file)
+            sys.exit(msg)
+
         self.is_running = True
         builder = Gtk.Builder()
         builder.set_translation_domain('terra')
-        builder.add_from_file(ConfigManager.data_dir + 'ui/preferences.ui')
+        builder.add_from_file(preferences_ui_file)
 
         self.window = builder.get_object('preferences_window')
         self.window.connect('destroy', self.on_cancel_clicked)
@@ -193,7 +200,8 @@ class Preferences:
 
         # TAB: About
         self.logo = builder.get_object('terra_logo')
-        self.logo_buffer = GdkPixbuf.Pixbuf.new_from_file_at_size(ConfigManager.data_dir + 'image/terra.svg', 64, 64)
+        logo_path = os.path.join(TerraHandler.get_resources_path(), 'image/terra.svg')
+        self.logo_buffer = GdkPixbuf.Pixbuf.new_from_file_at_size(logo_path, 64, 64)
         self.logo.set_from_pixbuf(self.logo_buffer)
 
         self.version = builder.get_object('version')

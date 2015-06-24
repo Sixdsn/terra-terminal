@@ -18,20 +18,29 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 """
 
+import os
+import sys
+
 from gi.repository import Gtk, Gdk
 
 from terra.config import ConfigManager
+from terra.handler import TerraHandler
 
 
 class WinDialog:
     def __init__(self, sender, active_terminal):
+        win_pref_ui_file = os.path.join(TerraHandler.get_resources_path(), 'ui/win_pref.ui')
+        if not os.path.exists(win_pref_ui_file):
+            msg = 'ERROR: UI data file is missing: {}'.format(win_pref_ui_file)
+            sys.exit(msg)
+
         ConfigManager.disable_losefocus_temporary = True
         self.sender = sender
         self.active_terminal = active_terminal
 
         self.builder = Gtk.Builder()
         self.builder.set_translation_domain('terra')
-        self.builder.add_from_file(ConfigManager.data_dir + 'ui/win_pref.ui')
+        self.builder.add_from_file(win_pref_ui_file)
         self.dialog = self.builder.get_object('win_dialog')
 
         self.window = self.sender.get_container().parent

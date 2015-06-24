@@ -25,12 +25,12 @@ import threading
 from gi.repository import Gtk, Vte, GLib, Gdk, GdkX11, GObject
 
 import terra.terra_utils as terra_utils
-from terra.__main__ import create_app, save_conf
 from terra.preferences import Preferences
 from terra.config import ConfigManager
+from terra.handler import TerraHandler
+from terra.i18n import t
 from terra.terminal_dialog import ProgDialog
 from terra.win_dialog import WinDialog
-from terra.i18n import t
 
 
 # this regex strings taken from pantheon-terminal
@@ -369,10 +369,10 @@ class VteObject(Gtk.VBox):
         self.fork_process(self.progname)
 
     def new_app(self, widget):
-        create_app()
+        TerraHandler.Wins.create_app()
 
     def save_conf(self, widget):
-        save_conf()
+        TerraHandler.Wins.save_conf()
 
     def open_preferences(self, widget):
         ConfigManager.disable_losefocus_temporary = True
