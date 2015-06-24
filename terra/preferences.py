@@ -19,6 +19,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 """
 
 import os
+import sys
+import shutil
 
 from gi.repository import Gtk, Gdk, GdkPixbuf, GdkX11
 
@@ -274,12 +276,30 @@ class Preferences:
         for option in boolean_options:
             ConfigManager.set_conf('general', option, getattr(self, option).get_active())
 
-        # TODO: Fix "Run on Startup" to work with the packaged application.
-        # if (self.run_on_startup.get_active() and not os.path.exists(os.environ['HOME'] + '/.config/autostart/terra.desktop')):
-        #     os.system('cp ' + __terra_app_directory__ + '/terra.desktop ' + os.environ['HOME'] + '/.config/autostart/terra.desktop')
-        #
-        # if (not self.run_on_startup.get_active() and os.path.exists(os.environ['HOME'] + '/.config/autostart/terra.desktop')):
-        #     os.system('rm -f ' + os.environ['HOME'] + '/.config/autostart/terra.desktop')
+        desktop_file_source = os.path.join(TerraHandler.get_resources_path(), 'terra.desktop')
+        if not os.path.exists(desktop_file_source):
+            msg = 'ERROR: Desktop file is missing: {}'.format(preferences_ui_file)
+            sys.exit(msg)
+
+        # TODO: Properly determine the running desktop environment.
+        autostart_directory = None
+        if os.path.isdir(os.path.expanduser('~/.config/autostart')):
+            autostart_directory = os.path.expanduser('~/.config/autostart')
+        elif os.path.isdir(os.path.expanduser('~/.kde4/Autostart')):
+            autostart_directory = os.path.expanduser('~/.kde4/Autostart')
+
+        # TODO: Catch errors.
+        if autostart_directory:
+            autostart_file_path = os.path.join(autostart_directory, 'terra.desktop')
+            if self.run_on_startup.get_active():
+                if not os.path.exists(autostart_file_path):
+                    shutil.copyfile(desktop_file_source, autostart_file_path)
+            else:
+                if os.path.exists(autostart_file_path):
+                    os.remove(autostart_file_path)
+        else:
+            msg = "[DEBUG] Desktop environment autostart missing: {}."
+            print(msg.format(autostart_directory))
 
         ConfigManager.set_conf('general', 'separator_size', int(self.separator_size.get_value()))
 
