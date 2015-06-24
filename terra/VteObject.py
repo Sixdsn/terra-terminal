@@ -54,15 +54,22 @@ regex_strings =[SCHEME + "//(?:" + USERPASS + "\\@)?" + HOST + PORT + URLPATH,
     "(?:news:|man:|info:)[[:alnum:]\\Q^_{|}~!\"#$%&'()*+,./;:=?`\\E]+"]
 
 class VteObjectContainer(Gtk.HBox):
-    def __init__(self, parent, bare=False, progname=ConfigManager.get_conf('general', 'start_shell_program'), pwd=None):
+    def __init__(self, parent, bare=False, progname=None, pwd=None):
         super(VteObjectContainer, self).__init__()
-        if not bare:
-            self.parent = parent
-            self.vte_list = []
-            self.active_terminal = None
-            self.append_terminal(VteObject(), progname, pwd=pwd)
-            self.pack_start(self.active_terminal, True, True, 0)
-            self.show_all()
+
+        if bare:
+            return
+
+        self.parent = parent
+        self.vte_list = []
+        self.active_terminal = None
+
+        if not progname:
+            progname = ConfigManager.get_conf('general', 'start_shell_program')
+        self.append_terminal(VteObject(), progname, pwd=pwd)
+
+        self.pack_start(self.active_terminal, True, True, 0)
+        self.show_all()
 
     def close_page(self):
         terminalwin = self.get_toplevel()

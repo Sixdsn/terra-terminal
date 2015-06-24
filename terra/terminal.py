@@ -38,7 +38,11 @@ class TerminalWinContainer:
     def __init__(self):
         terra.globalhotkeys.init()
         self.hotkey = terra.globalhotkeys.GlobalHotkey()
-        self.bind_success = self.hotkey.bind(ConfigManager.get_conf('shortcuts', 'global_key'), lambda w: self.show_hide(), None)
+
+        global_key_string = ConfigManager.get_conf('shortcuts', 'global_key')
+        if global_key_string:
+            self.bind_success = self.hotkey.bind(global_key_string, lambda w: self.show_hide(), None)
+
         self.apps = []
         self.old_apps = []
         self.screenid = 0
