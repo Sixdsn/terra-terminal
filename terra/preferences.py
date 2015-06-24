@@ -200,7 +200,7 @@ class Preferences:
 
         # TAB: About
         self.logo = builder.get_object('terra_logo')
-        logo_path = os.path.join(TerraHandler.get_resources_path(), 'image/terra.svg')
+        logo_path = os.path.join(TerraHandler.get_resources_path(), 'terra.svg')
         self.logo_buffer = GdkPixbuf.Pixbuf.new_from_file_at_size(logo_path, 64, 64)
         self.logo.set_from_pixbuf(self.logo_buffer)
 

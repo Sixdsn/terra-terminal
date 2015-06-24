@@ -187,7 +187,7 @@ class TerminalWin(Gtk.Window):
         self.resizer.connect('button-release-event', self.update_resizer)
 
         self.logo = self.builder.get_object('logo')
-        logo_path = os.path.join(TerraHandler.get_resources_path(), 'image/terra.svg')
+        logo_path = os.path.join(TerraHandler.get_resources_path(), 'terra.svg')
         self.logo_buffer = GdkPixbuf.Pixbuf.new_from_file_at_size(logo_path, 32, 32)
         self.logo.set_from_pixbuf(self.logo_buffer)
 

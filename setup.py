@@ -107,6 +107,10 @@ setup(
             'terra = terra.__main__:main'
         ],
     },
+    data_files=[
+        ('share/icons/hicolor/scalable/apps', ['terra/resources/terra.svg']),
+        ('share/applications', ['terra/resources/terra.desktop'])
+    ],
     install_requires=[
         'gi',
     ],
