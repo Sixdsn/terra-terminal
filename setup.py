@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 # -*- Mode: Python; coding: utf-8; indent-tabs-mode: nil; tab-width: 4 -*-
 ### BEGIN LICENSE
 # Copyright (C) 2012 Ozcan ESEN <ozcanesen@gmail.com>
@@ -71,6 +71,7 @@ def get_command_output(cmd, warn_on_stderr=True, warn_on_return_code=True):
     """Wait for a command and return its output.  Check for common
     errors and raise an exception if one of these occurs.
     """
+    print('>>>' + cmd)
     p = subprocess.Popen(cmd, shell=True, close_fds=True,
                          stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     stdout, stderr = p.communicate()
