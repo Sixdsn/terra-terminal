@@ -151,7 +151,8 @@ class TerminalWin(Gtk.Window):
 
         self.name = name
         self.screen_id = int(name.split('-')[2])
-        ConfigManager.add_callback(self.update_ui)
+        # Allow UI to be updated by other events.
+        TerraHandler.add_ui_event_handler(self.update_ui)
 
         self.screen = self.get_screen()
         self.screen.connect('monitors-changed', self.check_visible)
@@ -405,7 +406,7 @@ class TerminalWin(Gtk.Window):
             self.rec_parents(tree, container)
 
     def quit(self):
-        ConfigManager.remove_callback(self.update_ui)
+        TerraHandler.remove_ui_event_handler(self.update_ui)
         ConfigManager.save_config()
         TerraHandler.Wins.remove_app(self)
         self.destroy()
@@ -546,6 +547,7 @@ class TerminalWin(Gtk.Window):
         display = self.screen.get_display()
         return self.screen.get_monitor_workarea(self.screen.get_monitor_at_point(self.monitor.x, self.monitor.y))
 
+    # @TODO: Cleanup!
     def update_ui(self):
         self.unmaximize()
         self.stick()
@@ -655,7 +657,7 @@ class TerminalWin(Gtk.Window):
             # Toggle value
             ConfigManager.set_conf('terminal', 'show_scrollbar', not ConfigManager.get_conf('terminal', 'show_scrollbar'))
             ConfigManager.save_config()
-            ConfigManager.callback()
+            TerraHandler.execute_ui_event_handler()
             return True
 
         if ConfigManager.key_event_compare('move_up_key', event):
