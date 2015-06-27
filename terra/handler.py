@@ -3,7 +3,6 @@ Utilities for terra terminal.
 """
 
 import os
-import sys
 
 from pkg_resources import DistributionNotFound, Requirement, resource_filename, resource_isdir
 
