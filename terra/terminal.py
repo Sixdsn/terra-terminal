@@ -657,7 +657,7 @@ class TerminalWin(Gtk.Window):
             # Toggle value
             ConfigManager.set_conf('terminal', 'show_scrollbar', not ConfigManager.get_conf('terminal', 'show_scrollbar'))
             ConfigManager.save_config()
-            TerraHandler.execute_ui_event_handler()
+            TerraHandler.execute_ui_event_handlers()
             return True
 
         if ConfigManager.key_event_compare('move_up_key', event):

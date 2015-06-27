@@ -378,7 +378,7 @@ class Preferences:
             ConfigManager.set_conf('shortcuts', key, widget.get_text())
 
         ConfigManager.save_config()
-        TerraHandler.execute_ui_event_handler()
+        TerraHandler.execute_ui_event_handlers()
         self.window.present()
 
     def on_ok_clicked(self, widget):

@@ -74,6 +74,6 @@ class TerraHandler:
                     return
 
     @classmethod
-    def execute_ui_event_handler(cls):
+    def execute_ui_event_handlers(cls):
         for callable_handler in cls.__ui_event_handlers:
             callable_handler()
