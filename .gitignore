@@ -1,26 +1,21 @@
+# Ignore IDE specific files.
+/.idea/
+
+# Ignore binary files.
+__pycache__/
 *.py[cod]
 *.so
-*.egg
-*.egg-info
-.bzr
-.bzrignore
-dist
-build
-eggs
-parts
-bin
-var
-sdist
-develop-eggs
-.installed.cfg
-lib
-lib64
-pip-log.txt
-.coverage
-.tox
-nosetests.xml
-*.mo
-.mr.developer.cfg
-.project
-.pydevproject
-po
+
+# Ignore the workspace files.
+/po/
+*--ignore
+*--ignore.*
+*gz
+
+# Ignore distribution and packaging files.
+/build/
+/dist/
+/*.egg-info/
+/debian/files
+/debian/terra*
+/lextab.py

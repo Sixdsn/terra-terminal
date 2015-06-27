@@ -18,20 +18,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 """
 
-from gi.repository import Gtk, Vte, GLib, Gdk, GdkX11, GObject
 import os
 import re
-
-from preferences import Preferences
-from config import ConfigManager
-from terminal_dialog import ProgDialog
-from win_dialog import WinDialog
-from i18n import t
-
 import threading
 
-import terra_utils
-import terra_main
+from gi.repository import Gtk, Vte, GLib, Gdk, GdkX11, GObject
+
+import terra.terra_utils as terra_utils
+from terra.preferences import Preferences
+from terra.config import ConfigManager
+from terra.handler import TerraHandler
+from terra.i18n import t
+from terra.terminal_dialog import ProgDialog
+from terra.win_dialog import WinDialog
 
 
 # this regex strings taken from pantheon-terminal
@@ -55,15 +54,22 @@ regex_strings =[SCHEME + "//(?:" + USERPASS + "\\@)?" + HOST + PORT + URLPATH,
     "(?:news:|man:|info:)[[:alnum:]\\Q^_{|}~!\"#$%&'()*+,./;:=?`\\E]+"]
 
 class VteObjectContainer(Gtk.HBox):
-    def __init__(self, parent, bare=False, progname=ConfigManager.get_conf('general', 'start_shell_program'), pwd=None):
+    def __init__(self, parent, bare=False, progname=None, pwd=None):
         super(VteObjectContainer, self).__init__()
-        if not bare:
-            self.parent = parent
-            self.vte_list = []
-            self.active_terminal = None
-            self.append_terminal(VteObject(), progname, pwd=pwd)
-            self.pack_start(self.active_terminal, True, True, 0)
-            self.show_all()
+
+        if bare:
+            return
+
+        self.parent = parent
+        self.vte_list = []
+        self.active_terminal = None
+
+        if not progname:
+            progname = ConfigManager.get_conf('general', 'start_shell_program')
+        self.append_terminal(VteObject(), progname, pwd=pwd)
+
+        self.pack_start(self.active_terminal, True, True, 0)
+        self.show_all()
 
     def close_page(self):
         terminalwin = self.get_toplevel()
@@ -370,10 +376,10 @@ class VteObject(Gtk.VBox):
         self.fork_process(self.progname)
 
     def new_app(self, widget):
-        terra_main.create_app()
+        TerraHandler.Wins.create_app()
 
     def save_conf(self, widget):
-        terra_main.save_conf()
+        TerraHandler.Wins.save_conf()
 
     def open_preferences(self, widget):
         ConfigManager.disable_losefocus_temporary = True

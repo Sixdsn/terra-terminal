@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python2
 # -*- Mode: Python; coding: utf-8; indent-tabs-mode: nil; tab-width: 4 -*-
 ### BEGIN LICENSE
 # Copyright (C) 2012 Arnaud SOURIOUX <six.dsn@gmail.com>
@@ -18,15 +18,10 @@
 import sys
 import os
 
-os.putenv('LIBOVERLAY_SCROLLBAR','0')
-try:
-    from terra import terra_main
-except Exception as e:
-    print "Error Terra library is not installed."
-    print(e)
-    sys.exit(0)
-except:
-    print "Error Terra library is not installed."
-    sys.exit(0)
+# Add the project root the the PYTHONPATH environment variable.
+ROOT = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+sys.path.append(ROOT)
 
-terra_main.main()
+if __name__ == '__main__':
+    import terra.__main__
+    terra.__main__.main()

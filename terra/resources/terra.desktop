@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Terra
+Comment=Terminal Emulator
+Categories=GNOME;Utility;
+Exec=terra
+Icon=terra
+Terminal=false
+Type=Application

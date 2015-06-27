@@ -23,8 +23,8 @@ try:
     import gettext
     gettext.textdomain('terra')
     t = gettext.gettext
-except:
-    def dummytrans (text):
-        return(text)
+except ImportError:
+    def dummy_trans(text):
+        return text
 
-    t = dummytrans
+    t = dummy_trans

@@ -1,0 +1,7 @@
+
+graft terra
+
+include README.md
+
+global-exclude *.py[cod]
+global-exclude __pycache__

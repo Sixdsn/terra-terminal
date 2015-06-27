@@ -18,21 +18,32 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 """
 
-from gi.repository import Gtk, Gdk, GdkPixbuf, GdkX11
-from config import ConfigManager, __terra_app_directory__
-from i18n import t
 import os
+import sys
+import shutil
 
-class Preferences():
+from gi.repository import Gtk, Gdk, GdkPixbuf, GdkX11
 
+from terra.config import ConfigManager
+from terra.handler import TerraHandler
+from terra.i18n import t
+
+
+class Preferences:
     def __init__(self):
+        # TODO: Only initialize the UI once. Find a way to hide the window.
         self.init_ui()
 
     def init_ui(self):
+        preferences_ui_file = os.path.join(TerraHandler.get_resources_path(), 'ui/preferences.ui')
+        if not os.path.exists(preferences_ui_file):
+            msg = 'ERROR: UI data file is missing: {}'.format(preferences_ui_file)
+            sys.exit(msg)
+
         self.is_running = True
         builder = Gtk.Builder()
         builder.set_translation_domain('terra')
-        builder.add_from_file(ConfigManager.data_dir + 'ui/preferences.ui')
+        builder.add_from_file(preferences_ui_file)
 
         self.window = builder.get_object('preferences_window')
         self.window.connect('destroy', self.on_cancel_clicked)
@@ -191,7 +202,8 @@ class Preferences():
 
         # TAB: About
         self.logo = builder.get_object('terra_logo')
-        self.logo_buffer = GdkPixbuf.Pixbuf.new_from_file_at_size(ConfigManager.data_dir + 'image/terra.svg', 64, 64)
+        logo_path = os.path.join(TerraHandler.get_resources_path(), 'terra.svg')
+        self.logo_buffer = GdkPixbuf.Pixbuf.new_from_file_at_size(logo_path, 64, 64)
         self.logo.set_from_pixbuf(self.logo_buffer)
 
         self.version = builder.get_object('version')
@@ -264,11 +276,30 @@ class Preferences():
         for option in boolean_options:
             ConfigManager.set_conf('general', option, getattr(self, option).get_active())
 
-        if (self.run_on_startup.get_active() and not os.path.exists(os.environ['HOME'] + '/.config/autostart/terra.desktop')):
-            os.system('cp ' + __terra_app_directory__ + '/terra.desktop ' + os.environ['HOME'] + '/.config/autostart/terra.desktop')
+        desktop_file_source = os.path.join(TerraHandler.get_resources_path(), 'terra.desktop')
+        if not os.path.exists(desktop_file_source):
+            msg = 'ERROR: Desktop file is missing: {}'.format(preferences_ui_file)
+            sys.exit(msg)
 
-        if (not self.run_on_startup.get_active() and os.path.exists(os.environ['HOME'] + '/.config/autostart/terra.desktop')):
-            os.system('rm -f ' + os.environ['HOME'] + '/.config/autostart/terra.desktop')
+        # TODO: Properly determine the running desktop environment.
+        autostart_directory = None
+        if os.path.isdir(os.path.expanduser('~/.config/autostart')):
+            autostart_directory = os.path.expanduser('~/.config/autostart')
+        elif os.path.isdir(os.path.expanduser('~/.kde4/Autostart')):
+            autostart_directory = os.path.expanduser('~/.kde4/Autostart')
+
+        # TODO: Catch errors.
+        if autostart_directory:
+            autostart_file_path = os.path.join(autostart_directory, 'terra.desktop')
+            if self.run_on_startup.get_active():
+                if not os.path.exists(autostart_file_path):
+                    shutil.copyfile(desktop_file_source, autostart_file_path)
+            else:
+                if os.path.exists(autostart_file_path):
+                    os.remove(autostart_file_path)
+        else:
+            msg = "[DEBUG] Desktop environment autostart missing: {}."
+            print(msg.format(autostart_directory))
 
         ConfigManager.set_conf('general', 'separator_size', int(self.separator_size.get_value()))
 

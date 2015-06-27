@@ -34,7 +34,7 @@ defaultValues = {
         'hide_from_taskbar': True,
         'hide_on_start': False,
 
-        'select_by_word': 'LUEtWmEtejAtOSwuLz8lJiM6Xw==', # base64 encoded
+        'select_by_word': 'LUEtWmEtejAtOSwuLz8lJiM6Xw==',  # base64 encoded
         'start_shell_program': os.getenv('SHELL', '/bin/sh'),
         'start_directory': '$home$',
     },
@@ -118,8 +118,8 @@ defaultValues = {
 }
 
 # Create ConfigDefaults object containing the application default settings.
-ConfigDefaults = ConfigParser.RawConfigParser(allow_no_value=True)
+ConfigDefaults = ConfigParser.SafeConfigParser(allow_no_value=True)
 for section in defaultValues:
     ConfigDefaults.add_section(section)
     for option in defaultValues[section]:
-        ConfigDefaults.set(section, option, defaultValues[section][option])
+        ConfigDefaults.set(section, option, str(defaultValues[section][option]))

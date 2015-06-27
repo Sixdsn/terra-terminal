@@ -19,14 +19,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 """
 
-from gi.repository import Gtk, Gdk
+import commands
+import os
 from operator import attrgetter
 
-import os
-import commands
+from gi.repository import Gtk, Gdk
 
-from i18n import t
-from config import ConfigManager
+from terra.i18n import t
+from terra.config import ConfigManager
 
 def get_paned_parent(vte_list, ParId):
     parent = [item for item in vte_list if item.id == ParId]
