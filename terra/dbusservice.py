@@ -25,6 +25,7 @@ import dbus.glib
 DBUS_PATH = '/org/terraterminal/RemoteControl'
 DBUS_NAME = 'org.terraterminal.RemoteControl'
 
+
 class DbusService(dbus.service.Object):
     def __init__(self, app):
         self.app = app
@@ -35,4 +36,3 @@ class DbusService(dbus.service.Object):
     @dbus.service.method(DBUS_NAME)
     def show_hide(self):
         self.app.show_hide()
-

@@ -155,7 +155,7 @@ def move_right_screen(terminal):
 
 def is_in_screen(minus, monitor):
     if minus.x >= monitor.x and minus.y >= monitor.y:
-        if minus.x + minus.width <=  monitor.x + monitor.width and minus.y + minus.height <=  monitor.y + monitor.height:
+        if minus.x + minus.width <= monitor.x + monitor.width and minus.y + minus.height <= monitor.y + monitor.height:
             return True
     return False
 

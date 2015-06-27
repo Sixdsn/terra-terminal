@@ -302,7 +302,7 @@ class TerminalWin(Gtk.Window):
             tabid = 0
             for button in self.buttonbox:
                 if button != self.radio_group_leader:
-                    section = str('layout-Tabs-%d-%d'% (self.screen_id, tabid))
+                    section = str('layout-Tabs-%d-%d' % (self.screen_id, tabid))
                     ConfigManager.set_conf(section, 'name', button.get_label())
                     tabid += 1
 
@@ -433,7 +433,7 @@ class TerminalWin(Gtk.Window):
     def add_page(self, page_name=None):
         container = None
         if page_name:
-            section=str('layout-Child-%s-0'%(page_name[len('layout-Tabs-'):]))
+            section = str('layout-Child-%s-0' % (page_name[len('layout-Tabs-'):]))
             progname = ConfigManager.get_conf(section, 'prog')
             pwd = ConfigManager.get_conf(section, 'pwd')
             container = VteObjectContainer(self, progname=progname, pwd=pwd)
