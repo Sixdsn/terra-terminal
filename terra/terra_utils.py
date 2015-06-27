@@ -103,7 +103,7 @@ def get_running_cmd(terminal):
     pwd = get_pwd(terminal.pid[1])
     if not pwd:
         pwd = os.uname()[1]
-    ret = str("%s@%s $>%s"% (os.environ['USER'], pwd, "POUET"))#terminal.progname))
+    ret = str("%s@%s $>%s"% (os.environ['USER'], pwd, "POUET"))
     try:
         pid = int(commands.getstatusoutput("ps -o pid= --ppid " + str(terminal.pid[1]))[1])
         ret = get_prog_values(pid, pwd)

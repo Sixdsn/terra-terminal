@@ -288,17 +288,17 @@ class TerminalWin(Gtk.Window):
             ConfigManager.set_conf(self.name, 'height', self.monitor.height)
             ConfigManager.set_conf(self.name, 'fullscreen', self.is_fullscreen)
 
-            #we delete all tabs first to avoid unused
-            #we delete all layouts first to avoid unused
+            # We delete all tabs first to avoid unused.
+            # We delete all layouts first to avoid unused.
             for section in ConfigManager.get_sections():
                 if (section.find("layout-Tabs-%d"% (self.screen_id)) == 0):
-                    # we won't delete those who are set as disabled
+                    # We won't delete those who are set as disabled.
                     if not ConfigManager.get_conf(section, 'disabled'):
                         ConfigManager.del_conf(section)
                 if (section.find("layout-Child-%d"% (self.screen_id)) == 0):
                     ConfigManager.del_conf(section)
 
-            #We add them all
+            # We add them all.
             tabid = 0
             for button in self.buttonbox:
                 if button != self.radio_group_leader:
@@ -332,7 +332,7 @@ class TerminalWin(Gtk.Window):
             child.pos = pos
             child.parent = parent.id
 
-    #there is a very small issue if the tabbar is visible
+    # There is a very small issue if the tabbar is visible.
     def get_paned_pos(self, tree):
         pos = tree.get_position()
         if isinstance(tree, Gtk.HPaned):
@@ -557,7 +557,7 @@ class TerminalWin(Gtk.Window):
         self.set_decorated(ConfigManager.get_conf('window', 'use_border'))
         self.set_skip_taskbar_hint(ConfigManager.get_conf('general', 'hide_from_taskbar'))
 
-        #hide/show tabbar
+        # hide/show tabbar.
         if ConfigManager.get_conf(self.name, 'hide-tab-bar'):
             self.tabbar.hide()
             self.tabbar.set_no_show_all(True)
@@ -594,13 +594,13 @@ class TerminalWin(Gtk.Window):
             if vert != None and vert <= 100:
                 height = self.monitor.height
                 vertical_position = vert * screen_rectangle.height / 100
-                #top
+                # top
                 if vertical_position - (height / 2) < 0:
                     vertical_position = screen_rectangle.y + 0
-                #bottom
+                # bottom
                 elif vertical_position + (height / 2) > screen_rectangle.height:
                     vertical_position = screen_rectangle.y + screen_rectangle.height - height
-                #center
+                # center
                 else:
                     vertical_position = screen_rectangle.y + vertical_position - (height / 2)
 
@@ -608,13 +608,13 @@ class TerminalWin(Gtk.Window):
             if horiz != None and horiz <= 100:
                 width = self.monitor.width - 1
                 horizontal_position = horiz * screen_rectangle.width / 100
-                #left
+                # left
                 if horizontal_position - (width / 2) < 0:
                     horizontal_position = screen_rectangle.x + 0
-                #right
+                # right
                 elif horizontal_position + (width / 2) > screen_rectangle.width:
                     horizontal_position = screen_rectangle.x + screen_rectangle.width - width
-                #center
+                # center
                 else:
                     horizontal_position = screen_rectangle.x + horizontal_position - (width / 2)
             self.unfullscreen()
