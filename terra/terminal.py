@@ -50,14 +50,14 @@ class TerminalWinContainer:
         self.is_running = False
 
     def show_hide(self):
-        if self.on_doing == False:
+        if not self.on_doing:
             self.on_doing = True
             for app in self.apps:
                 app.show_hide()
             self.on_doing = False
 
     def update_ui(self):
-        if self.on_doing == False:
+        if not self.on_doing:
             self.on_doing = True
             for app in self.apps:
                 app.update_ui()
@@ -96,7 +96,7 @@ class TerminalWinContainer:
 
     def app_quit(self):
         for app in self.apps:
-            if app.quit() == False:
+            if not app.quit():
                 return
         sys.stdout.flush()
         sys.stderr.flush()
@@ -114,7 +114,7 @@ class TerminalWinContainer:
         monitor = terra_utils.get_screen(screenName)
         if screenName == 'layout':
             screenName = self.get_screen_name()
-        if monitor != None:
+        if monitor is not None:
             app = TerminalWin(screenName, monitor)
             if not self.bind_success:
                 terra_utils.cannot_bind(app)
@@ -450,8 +450,8 @@ class TerminalWin(Gtk.Window):
                 page_count += 1
 
         tab_name = ConfigManager.get_conf(page_name, 'name')
-        if page_name == None or tab_name == None:
-            tab_name = t("Terminal ") + str(page_count+1)
+        if page_name is None or tab_name is None:
+            tab_name = t("Terminal ") + str(page_count + 1)
 
         new_button = Gtk.RadioButton.new_with_label_from_widget(self.radio_group_leader, tab_name)
         new_button.set_property('draw-indicator', False)
@@ -481,7 +481,7 @@ class TerminalWin(Gtk.Window):
         return self.notebook.get_nth_page(self.notebook.get_current_page()).active_terminal
 
     def change_page(self, button):
-        if button.get_active() == False:
+        if not button.get_active():
             return
 
         page_no = 0
@@ -574,7 +574,7 @@ class TerminalWin(Gtk.Window):
             self.fullscreen()
 
             # hide resizer
-            if self.resizer.get_child2() != None:
+            if self.resizer.get_child2() is not None:
                 self.resizer.remove(self.resizer.get_child2())
 
             # hide tab bar
@@ -583,7 +583,7 @@ class TerminalWin(Gtk.Window):
                 self.tabbar.hide()
         else:
             # show resizer
-            if self.resizer.get_child2() == None:
+            if self.resizer.get_child2() is None:
                 self.resizer.add2(Gtk.Box())
                 self.resizer.get_child2().show_all()
 
@@ -591,7 +591,7 @@ class TerminalWin(Gtk.Window):
             horizontal_position = self.monitor.x
             screen_rectangle = self.get_screen_rectangle()
             vert = ConfigManager.get_conf(self.name, 'vertical-position')
-            if vert != None and vert <= 100:
+            if vert is not None and vert <= 100:
                 height = self.monitor.height
                 vertical_position = vert * screen_rectangle.height / 100
                 # top
@@ -605,7 +605,7 @@ class TerminalWin(Gtk.Window):
                     vertical_position = screen_rectangle.y + vertical_position - (height / 2)
 
             horiz = ConfigManager.get_conf(self.name, 'horizontal-position')
-            if horiz != None and horiz <= 100:
+            if horiz is not None and horiz <= 100:
                 width = self.monitor.width - 1
                 horizontal_position = horiz * screen_rectangle.width / 100
                 # left
@@ -626,7 +626,11 @@ class TerminalWin(Gtk.Window):
         css_provider = Gtk.CssProvider()
 
         bg = Gdk.color_parse(ConfigManager.get_conf('terminal', 'color_background'))
-        bg_hex =  '#%02X%02X%02X' % (int((bg.red/65536.0)*256), int((bg.green/65536.0)*256), int((bg.blue/65536.0)*256))
+        bg_hex = '#%02X%02X%02X' % (
+            int((bg.red / 65536.0) * 256),
+            int((bg.green / 65536.0) * 256),
+            int((bg.blue / 65536.0) * 256)
+        )
 
         css_provider.load_from_data('''
             #notebook GtkPaned {
@@ -737,7 +741,7 @@ class TerminalWin(Gtk.Window):
             page_button_list = self.buttonbox.get_children()[1:]
 
             for i in range(len(page_button_list)):
-                if page_button_list[i].get_active() == True:
+                if page_button_list[i].get_active():
                     if (i + 1) < len(page_button_list):
                         page_button_list[i+1].set_active(True)
                     else:
@@ -812,7 +816,7 @@ class TerminalWin(Gtk.Window):
     def init_transparency(self):
         self.set_app_paintable(True)
         visual = self.screen.get_rgba_visual()
-        if visual != None and self.screen.is_composited():
+        if visual is not None and self.screen.is_composited():
             self.set_visual(visual)
         else:
             ConfigManager.use_fake_transparency = True
@@ -829,7 +833,7 @@ class TerminalWin(Gtk.Window):
             win_rect = self.monitor
         else:
             win_rect = self.get_allocation()
-        if self.get_window() != None:
+        if self.get_window() is not None:
             self.get_window().enable_synchronized_configure()
         if i < step+1:
             self.resize(win_rect.width, win_rect.height - int(((win_rect.height/step) * i)))
@@ -839,7 +843,7 @@ class TerminalWin(Gtk.Window):
         else:
             self.hide()
             self.unrealize()
-        if self.get_window() != None:
+        if self.get_window() is not None:
             self.get_window().configure_finished()
         self.slide_effect_running = False
 
@@ -850,7 +854,7 @@ class TerminalWin(Gtk.Window):
             win_rect = self.monitor
         else:
             win_rect = self.get_screen_rectangle()
-        if self.get_window() != None:
+        if self.get_window() is not None:
             self.get_window().enable_synchronized_configure()
         if i < (step + 1):
             self.resize(win_rect.width, int(((win_rect.height/step) * i)))
@@ -859,7 +863,7 @@ class TerminalWin(Gtk.Window):
             self.resizer.queue_resize()
             self.update_events()
             GObject.timeout_add(ConfigManager.get_conf('window', 'animation_step_time'), self.slide_down, i+1)
-        if self.get_window() != None:
+        if self.get_window() is not None:
             self.get_window().configure_finished()
         self.slide_effect_running = False
 

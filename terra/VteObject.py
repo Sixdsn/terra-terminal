@@ -185,7 +185,7 @@ class VteObject(Gtk.VBox):
     def scroll_event(self, widget, event):
         if (Gdk.ModifierType.CONTROL_MASK & event.state) == Gdk.ModifierType.CONTROL_MASK:
             state, direction = event.get_scroll_direction()
-            if state == False:
+            if not state:
                 return
 
             if direction == Gdk.ScrollDirection.UP:
