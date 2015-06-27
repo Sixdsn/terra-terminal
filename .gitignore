@@ -16,3 +16,6 @@ __pycache__/
 /build/
 /dist/
 /*.egg-info/
+/debian/files
+/debian/terra*
+/lextab.py
