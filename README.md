@@ -24,5 +24,9 @@ Features to come:
 - Start a graphical program instead of a term program.
   * Might need much time if this is possible
 
+Checkout, Build and Run:
+--
+Check the Wiki [here](https://github.com/Sixdsn/terra-terminal/wiki/Installation)
+
 If you want to contribute just checkout and try.
 Feel free to open issues for bug report or new features.
