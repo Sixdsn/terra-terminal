@@ -62,7 +62,7 @@ def my_sorted(elems):
     return (_elems)
 
 def get_screen(name):
-    if (ConfigManager.get_conf(name, 'enabled') == False):
+    if ConfigManager.get_conf(name, 'disabled'):
         return None
     posx = ConfigManager.get_conf(name, 'posx')
     posy = ConfigManager.get_conf(name, 'posy')

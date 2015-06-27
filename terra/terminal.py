@@ -219,7 +219,7 @@ class TerminalWin(Gtk.Window):
         added = False
         for section in ConfigManager.get_sections():
             tabs = str('layout-Tabs-%d'% self.screen_id)
-            if (section.find(tabs) == 0 and ConfigManager.get_conf(section, 'enabled') == True):
+            if (section.find(tabs) == 0 and not ConfigManager.get_conf(section, 'disabled')):
                 self.add_page(page_name=str(section))
                 added = True
         if (not added):
@@ -285,14 +285,13 @@ class TerminalWin(Gtk.Window):
             ConfigManager.set_conf(self.name, 'width', self.monitor.width)
             ConfigManager.set_conf(self.name, 'height', self.monitor.height)
             ConfigManager.set_conf(self.name, 'fullscreen', self.is_fullscreen)
-            ConfigManager.set_conf(self.name, 'enabled', 'True')
 
             #we delete all tabs first to avoid unused
             #we delete all layouts first to avoid unused
             for section in ConfigManager.get_sections():
                 if (section.find("layout-Tabs-%d"% (self.screen_id)) == 0):
                     # we won't delete those who are set as disabled
-                    if ConfigManager.get_conf(section, 'enabled') == True:
+                    if not ConfigManager.get_conf(section, 'disabled'):
                         ConfigManager.del_conf(section)
                 if (section.find("layout-Child-%d"% (self.screen_id)) == 0):
                     ConfigManager.del_conf(section)
@@ -303,7 +302,6 @@ class TerminalWin(Gtk.Window):
                 if button != self.radio_group_leader:
                     section = str('layout-Tabs-%d-%d'% (self.screen_id, tabid))
                     ConfigManager.set_conf(section, 'name', button.get_label())
-                    ConfigManager.set_conf(section, 'enabled', 'True')
                     tabid = tabid + 1
 
             tabid = 0
