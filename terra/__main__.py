@@ -22,6 +22,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 import os
 import sys
 
+# Disabled overlay scrollbars.
+os.putenv('LIBOVERLAY_SCROLLBAR', '0')
+
 from terra.config import ConfigManager
 from terra.handler import TerraHandler
 from terra.terminal import TerminalWinContainer
