@@ -291,11 +291,11 @@ class TerminalWin(Gtk.Window):
             # We delete all tabs first to avoid unused.
             # We delete all layouts first to avoid unused.
             for section in ConfigManager.get_sections():
-                if section.find("layout-Tabs-%d"% (self.screen_id)) == 0:
+                if section.find("layout-Tabs-%d" % self.screen_id) == 0:
                     # We won't delete those who are set as disabled.
                     if not ConfigManager.get_conf(section, 'disabled'):
                         ConfigManager.del_conf(section)
-                if section.find("layout-Child-%d"% (self.screen_id)) == 0:
+                if section.find("layout-Child-%d" % self.screen_id) == 0:
                     ConfigManager.del_conf(section)
 
             # We add them all.

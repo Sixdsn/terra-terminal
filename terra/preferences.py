@@ -231,17 +231,17 @@ class Preferences:
     def generate_key_string(self, widget, event):
         key_str = ''
 
-        if ((Gdk.ModifierType.CONTROL_MASK & event.state) == Gdk.ModifierType.CONTROL_MASK):
-            key_str = key_str + '<Control>'
+        if (Gdk.ModifierType.CONTROL_MASK & event.state) == Gdk.ModifierType.CONTROL_MASK:
+            key_str += '<Control>'
 
-        if ((Gdk.ModifierType.MOD1_MASK & event.state) == Gdk.ModifierType.MOD1_MASK):
-            key_str = key_str + '<Alt>'
+        if (Gdk.ModifierType.MOD1_MASK & event.state) == Gdk.ModifierType.MOD1_MASK:
+            key_str += '<Alt>'
 
-        if ((Gdk.ModifierType.SHIFT_MASK & event.state) == Gdk.ModifierType.SHIFT_MASK):
-            key_str = key_str + '<Shift>'
+        if (Gdk.ModifierType.SHIFT_MASK & event.state) == Gdk.ModifierType.SHIFT_MASK:
+            key_str += '<Shift>'
 
-        if ((Gdk.ModifierType.SUPER_MASK & event.state) == Gdk.ModifierType.SUPER_MASK):
-            key_str = key_str + '<Super>'
+        if (Gdk.ModifierType.SUPER_MASK & event.state) == Gdk.ModifierType.SUPER_MASK:
+            key_str += '<Super>'
 
         key_str = key_str + Gdk.keyval_name(event.keyval)
 
