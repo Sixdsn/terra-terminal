@@ -23,8 +23,7 @@ import sys
 
 from gi.repository import Gtk, Gdk
 
-from terra.config import ConfigManager
-from terra.config import TerraHandler
+from terra.config import ConfigManager, TerraHandler
 
 
 class ProgDialog:
