@@ -23,8 +23,6 @@ from base64 import b64encode, b64decode
 import ConfigParser
 import os
 
-from gi.repository import Gdk
-
 from terra.defaults import ConfigDefaults
 from terra.handler import TerraHandler
 
@@ -118,29 +116,3 @@ class ConfigManager:
         with open(config_file_path, 'wb') as configfile:
             # @TODO: Only save overridden values?!?
             cls.config.write(configfile)
-
-    @staticmethod
-    def key_event_compare(conf_name, event):
-        key_string = ConfigManager.get_conf('shortcuts', conf_name)
-
-        if ((Gdk.ModifierType.CONTROL_MASK & event.state) == Gdk.ModifierType.CONTROL_MASK) != ('<Control>' in key_string):
-            return False
-
-        if ((Gdk.ModifierType.MOD1_MASK & event.state) == Gdk.ModifierType.MOD1_MASK) != ('<Alt>' in key_string):
-            return False
-
-        if ((Gdk.ModifierType.SHIFT_MASK & event.state) == Gdk.ModifierType.SHIFT_MASK) != ('<Shift>' in key_string):
-            return False
-
-        if ((Gdk.ModifierType.SUPER_MASK & event.state) == Gdk.ModifierType.SUPER_MASK) != ('<Super>' in key_string):
-            return False
-
-        key_string = key_string.replace('<Control>', '')
-        key_string = key_string.replace('<Alt>', '')
-        key_string = key_string.replace('<Shift>', '')
-        key_string = key_string.replace('<Super>', '')
-
-        if (key_string.lower() != Gdk.keyval_name(event.keyval).lower()):
-            return False
-
-        return True

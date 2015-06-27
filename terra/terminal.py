@@ -653,86 +653,86 @@ class TerminalWin(Gtk.Window):
         style_context.add_provider_for_screen(self.screen, css_provider, Gtk.STYLE_PROVIDER_PRIORITY_USER)
 
     def on_keypress(self, widget, event):
-        if ConfigManager.key_event_compare('toggle_scrollbars_key', event):
+        if self.key_event_compare('toggle_scrollbars_key', event):
             # Toggle value
             ConfigManager.set_conf('terminal', 'show_scrollbar', not ConfigManager.get_conf('terminal', 'show_scrollbar'))
             ConfigManager.save_config()
             TerraHandler.execute_ui_event_handlers()
             return True
 
-        if ConfigManager.key_event_compare('move_up_key', event):
+        if self.key_event_compare('move_up_key', event):
             self.get_active_terminal().move(direction=1)
             return True
 
-        if ConfigManager.key_event_compare('move_down_key', event):
+        if self.key_event_compare('move_down_key', event):
             self.get_active_terminal().move(direction=2)
             return True
 
-        if ConfigManager.key_event_compare('move_left_key', event):
+        if self.key_event_compare('move_left_key', event):
             self.get_active_terminal().move(direction=3)
             return True
 
-        if ConfigManager.key_event_compare('move_right_key', event):
+        if self.key_event_compare('move_right_key', event):
             self.get_active_terminal().move(direction=4)
             return True
 
-        if ConfigManager.key_event_compare('move_left_screen_key', event):
+        if self.key_event_compare('move_left_screen_key', event):
             terra_utils.move_left_screen(self)
             return True
 
-        if ConfigManager.key_event_compare('move_right_screen_key', event):
+        if self.key_event_compare('move_right_screen_key', event):
             terra_utils.move_right_screen(self)
             return True
 
-        if ConfigManager.key_event_compare('quit_key', event):
+        if self.key_event_compare('quit_key', event):
             self.quit()
             return True
 
-        if ConfigManager.key_event_compare('select_all_key', event):
+        if self.key_event_compare('select_all_key', event):
             self.get_active_terminal().select_all()
             return True
 
-        if ConfigManager.key_event_compare('copy_key', event):
+        if self.key_event_compare('copy_key', event):
             self.get_active_terminal().copy_clipboard()
             return True
 
-        if ConfigManager.key_event_compare('paste_key', event):
+        if self.key_event_compare('paste_key', event):
             self.get_active_terminal().paste_clipboard()
             return True
 
-        if ConfigManager.key_event_compare('split_v_key', event):
+        if self.key_event_compare('split_v_key', event):
             self.get_active_terminal().split_axis(None, 'h')
             return True
 
-        if ConfigManager.key_event_compare('split_h_key', event):
+        if self.key_event_compare('split_h_key', event):
             self.get_active_terminal().split_axis(None, 'v')
             return True
 
-        if ConfigManager.key_event_compare('close_node_key', event):
+        if self.key_event_compare('close_node_key', event):
             self.get_active_terminal().close_node(None)
             return True
 
-        if ConfigManager.key_event_compare('fullscreen_key', event):
+        if self.key_event_compare('fullscreen_key', event):
             self.toggle_fullscreen()
             return True
 
-        if ConfigManager.key_event_compare('new_page_key', event):
+        if self.key_event_compare('new_page_key', event):
             self.add_page()
             return True
 
-        if ConfigManager.key_event_compare('rename_page_key', event):
+        if self.key_event_compare('rename_page_key', event):
             for button in self.buttonbox:
                 if button != self.radio_group_leader and button.get_active():
                     self.page_rename(None, button)
                     return True
 
-        if ConfigManager.key_event_compare('close_page_key', event):
+        if self.key_event_compare('close_page_key', event):
             for button in self.buttonbox:
                 if button != self.radio_group_leader and button.get_active():
                     self.page_close(None, button)
                     return True
 
-        if ConfigManager.key_event_compare('next_page_key', event):
+        if self.key_event_compare('next_page_key', event):
             page_button_list = self.buttonbox.get_children()[1:]
 
             for i in range(len(page_button_list)):
@@ -743,8 +743,7 @@ class TerminalWin(Gtk.Window):
                         page_button_list[0].set_active(True)
                     return True
 
-
-        if ConfigManager.key_event_compare('prev_page_key', event):
+        if self.key_event_compare('prev_page_key', event):
             page_button_list = self.buttonbox.get_children()[1:]
 
             for i in range(len(page_button_list)):
@@ -755,7 +754,7 @@ class TerminalWin(Gtk.Window):
                         page_button_list[-1].set_active(True)
                     return True
 
-        if ConfigManager.key_event_compare('move_page_left_key', event):
+        if self.key_event_compare('move_page_left_key', event):
             i = 0
             for button in self.buttonbox:
                 if button != self.radio_group_leader and button.get_active():
@@ -767,7 +766,7 @@ class TerminalWin(Gtk.Window):
                         return False
                 i += 1
 
-        if ConfigManager.key_event_compare('move_page_right_key', event):
+        if self.key_event_compare('move_page_right_key', event):
             i = 0
             for button in self.buttonbox:
                 if button != self.radio_group_leader and button.get_active():
@@ -778,6 +777,32 @@ class TerminalWin(Gtk.Window):
                     else:
                         return False
                 i += 1
+
+    @staticmethod
+    def key_event_compare(conf_name, event):
+        key_string = ConfigManager.get_conf('shortcuts', conf_name)
+
+        if ((Gdk.ModifierType.CONTROL_MASK & event.state) == Gdk.ModifierType.CONTROL_MASK) != ('<Control>' in key_string):
+            return False
+
+        if ((Gdk.ModifierType.MOD1_MASK & event.state) == Gdk.ModifierType.MOD1_MASK) != ('<Alt>' in key_string):
+            return False
+
+        if ((Gdk.ModifierType.SHIFT_MASK & event.state) == Gdk.ModifierType.SHIFT_MASK) != ('<Shift>' in key_string):
+            return False
+
+        if ((Gdk.ModifierType.SUPER_MASK & event.state) == Gdk.ModifierType.SUPER_MASK) != ('<Super>' in key_string):
+            return False
+
+        key_string = key_string.replace('<Control>', '')
+        key_string = key_string.replace('<Alt>', '')
+        key_string = key_string.replace('<Shift>', '')
+        key_string = key_string.replace('<Super>', '')
+
+        if key_string.lower() != Gdk.keyval_name(event.keyval).lower():
+            return False
+
+        return True
 
     def toggle_fullscreen(self):
         self.is_fullscreen = not self.is_fullscreen
