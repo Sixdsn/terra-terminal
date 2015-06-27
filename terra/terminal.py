@@ -64,33 +64,29 @@ class TerminalWinContainer:
             self.on_doing = False
 
     def get_screen_name(self):
-        screenname = str("layout-screen-%d"% self.screenid)
+        screenname = str('layout-screen-%d' % self.screenid)
 
-        tabbar = ConfigManager.get_conf('layout', 'hide-tab-bar')
-        if (tabbar):
+        if ConfigManager.get_conf('layout', 'hide-tab-bar'):
             ConfigManager.set_conf(screenname, 'hide-tab-bar', True)
         else:
             ConfigManager.set_conf(screenname, 'hide-tab-bar', False)
 
-        tabbarFull = ConfigManager.get_conf('layout', 'hide-tab-bar-fullcreen')
-        if (tabbarFull):
+        if ConfigManager.get_conf('layout', 'hide-tab-bar-fullscreen'):
             ConfigManager.set_conf(screenname, 'hide-tab-bar-fullscreen', True)
         else:
             ConfigManager.set_conf(screenname, 'hide-tab-bar-fullscreen', False)
 
-        vertical_position = ConfigManager.get_conf('layout', 'vertical-position')
-        if (vertical_position):
+        if ConfigManager.get_conf('layout', 'vertical-position'):
             ConfigManager.set_conf(screenname, 'vertical-position', vertical_position)
         else:
             ConfigManager.set_conf(screenname, 'vertical-position', 150)
 
-        horizontal_position = ConfigManager.get_conf('layout', 'horizontal-position')
-        if (horizontal_position):
+        if ConfigManager.get_conf('layout', 'horizontal-position'):
             ConfigManager.set_conf(screenname, 'horizontal-position', horizontal_position)
         else:
             ConfigManager.set_conf(screenname, 'horizontal-position', 150)
 
-        return (screenname)
+        return screenname
 
     def save_conf(self):
         for app in self.apps:
