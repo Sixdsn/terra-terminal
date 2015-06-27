@@ -48,8 +48,8 @@ def parse_pkg_config(command, components, options_dict=None):
             'extra_compile_args': []
         }
 
-    commandLine = '%s --cflags --libs %s' % (command, components)
-    output = get_command_output(commandLine).strip()
+    command_line = '%s --cflags --libs %s' % (command, components)
+    output = get_command_output(command_line).strip()
     for comp in output.split():
         prefix, rest = comp[:2], comp[2:]
         if prefix == '-I':
@@ -61,9 +61,6 @@ def parse_pkg_config(command, components, options_dict=None):
         else:
             options_dict['extra_compile_args'].append(comp)
 
-    commandLine = '%s --variable=libdir %s' % (command, components)
-    output = get_command_output(commandLine).strip()
-
     return options_dict
 
 
@@ -71,7 +68,6 @@ def get_command_output(cmd, warn_on_stderr=True, warn_on_return_code=True):
     """Wait for a command and return its output.  Check for common
     errors and raise an exception if one of these occurs.
     """
-    print('>>>' + cmd)
     p = subprocess.Popen(cmd, shell=True, close_fds=True,
                          stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     stdout, stderr = p.communicate()
