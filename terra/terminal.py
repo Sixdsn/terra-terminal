@@ -134,6 +134,7 @@ class TerminalWinContainer:
         self.is_running = True
         Gtk.main()
 
+
 class TerminalWin(Gtk.Window):
     def __init__(self, name, monitor):
         main_ui_file = os.path.join(TerraHandler.get_resources_path(), 'ui/main.ui')

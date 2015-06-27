@@ -53,6 +53,7 @@ regex_strings =[SCHEME + "//(?:" + USERPASS + "\\@)?" + HOST + PORT + URLPATH,
     "(?:mailto:)?" + USERCHARS_CLASS + "[" + USERCHARS+ ".]*\\@" + HOSTCHARS_CLASS + "+\\." + HOST,
     "(?:news:|man:|info:)[[:alnum:]\\Q^_{|}~!\"#$%&'()*+,./;:=?`\\E]+"]
 
+
 class VteObjectContainer(Gtk.HBox):
     def __init__(self, parent, bare=False, progname=None, pwd=None):
         super(VteObjectContainer, self).__init__()
@@ -94,6 +95,7 @@ class VteObjectContainer(Gtk.HBox):
         VteObjectContainer.handle_id.counter = max(VteObjectContainer.handle_id.counter, setter) + 1
         return (ret_id)
 
+
 class VteObject(Gtk.VBox):
     def __init__(self, term_id=0):
         super(Gtk.VBox, self).__init__()
@@ -116,7 +118,6 @@ class VteObject(Gtk.VBox):
         self.vscroll = Gtk.VScrollbar(self.vte.get_vadjustment())
         self.hbox.pack_start(self.vscroll, False, False, 0)
         self.pack_start(self.hbox, True, True, 0)
-
 
         for regex_string in regex_strings:
             regex_obj = GLib.Regex.new(regex_string, 0, 0)
@@ -269,7 +270,6 @@ class VteObject(Gtk.VBox):
         menu_item.connect('button-press-event', handle_event)
         menu_item.connect('activate', handle_event)
 
-
     def on_button_release(self, widget, event):
         self.get_container().active_terminal = self
 
@@ -300,7 +300,6 @@ class VteObject(Gtk.VBox):
                 self.menu_paste = Gtk.MenuItem(t("Paste"))
                 self.menu_paste.connect("activate", lambda w: self.vte.paste_clipboard())
                 self.menu.append(self.menu_paste)
-
 
             self.menu_select_all = Gtk.MenuItem(t("Select All"))
             self.menu_select_all.connect("activate", lambda w: self.vte.select_all())
@@ -479,7 +478,6 @@ class VteObject(Gtk.VBox):
         self.get_container().append_terminal(new_terminal, progname, pwd)
         parent.show_all()
         new_terminal.grab_focus()
-
 
     # direction
     # 1 = up (default)
