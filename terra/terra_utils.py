@@ -68,7 +68,7 @@ def get_screen(name):
     posy = ConfigManager.get_conf(name, 'posy')
     width = ConfigManager.get_conf(name, 'width')
     height = ConfigManager.get_conf(name, 'height')
-    if posx == None or posy == None or width == None or height == None:
+    if posx is None or posy is None or width is None or height is None:
         posx = ConfigManager.get_conf('layout', 'posx')
         posy = ConfigManager.get_conf('layout', 'posy')
         width = ConfigManager.get_conf('layout', 'width')
@@ -78,7 +78,7 @@ def get_screen(name):
     rect.y = posy
     rect.width = width
     rect.height = height
-    return (rect)
+    return rect
 
 def cannot_bind(app):
     ConfigManager.set_conf('general', 'hide_on_start', False)
