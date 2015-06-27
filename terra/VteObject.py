@@ -196,7 +196,7 @@ class VteObject(Gtk.VBox):
     def change_font_size(self, sender, factor):
         current_font = self.vte.get_font()
         current_size = current_font.get_size()
-        factor = factor + 1
+        factor += 1
         new_size = int(current_size * factor)
 
         if new_size < 2048 or new_size > 60000:

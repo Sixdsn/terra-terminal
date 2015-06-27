@@ -304,7 +304,7 @@ class TerminalWin(Gtk.Window):
                 if button != self.radio_group_leader:
                     section = str('layout-Tabs-%d-%d'% (self.screen_id, tabid))
                     ConfigManager.set_conf(section, 'name', button.get_label())
-                    tabid = tabid + 1
+                    tabid += 1
 
             tabid = 0
             for container in self.notebook.get_children():
@@ -320,7 +320,7 @@ class TerminalWin(Gtk.Window):
                     ConfigManager.set_conf(section, 'prog', child.progname)
                     ConfigManager.set_conf(section, 'pwd', child.pwd)
                     childid += 1
-                tabid = tabid + 1
+                tabid += 1
 
         ConfigManager.save_config()
 
@@ -491,7 +491,7 @@ class TerminalWin(Gtk.Window):
                     self.notebook.set_current_page(page_no)
                     self.get_active_terminal().grab_focus()
                     return
-                page_no = page_no + 1
+                page_no += 1
 
     def page_button_mouse_event(self, button, event):
         if event.button != 3:
@@ -542,7 +542,7 @@ class TerminalWin(Gtk.Window):
                     last_button = self.buttonbox.get_children()[-1]
                     last_button.set_active(True)
                     return True
-                page_no = page_no + 1
+                page_no += 1
 
     def get_screen_rectangle(self):
         display = self.screen.get_display()
@@ -852,7 +852,7 @@ class TerminalWin(Gtk.Window):
             win_rect = self.get_screen_rectangle()
         if self.get_window() != None:
             self.get_window().enable_synchronized_configure()
-        if i < step + 1:
+        if i < (step + 1):
             self.resize(win_rect.width, int(((win_rect.height/step) * i)))
             self.queue_resize()
             self.resizer.set_property('position', int(((win_rect.height/step) * i)))
