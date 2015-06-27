@@ -112,9 +112,6 @@ setup(
         ('share/icons/hicolor/scalable/apps', ['terra/resources/terra.svg']),
         ('share/applications', ['terra/resources/terra.desktop'])
     ],
-    install_requires=[
-        'gi',
-    ],
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
         'Environment :: Console',
