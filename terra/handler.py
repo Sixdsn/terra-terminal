@@ -14,6 +14,9 @@ class TerraHandler:
     __root_path = ''
     __config_path = ''
 
+    # @TODO: Remove and cleanup TerminalWin.update_ui()!? Use the Wins dictionary instead?
+    __ui_event_handlers = []
+
     Wins = None
 
     @classmethod
@@ -56,3 +59,21 @@ class TerraHandler:
                 full_path = tmp_path
 
         return full_path
+
+    @classmethod
+    def add_ui_event_handler(cls, callable_handler):
+        if callable_handler not in cls.__ui_event_handlers:
+            cls.__ui_event_handlers.append(callable_handler)
+
+    @classmethod
+    def remove_ui_event_handler(cls, callable_handler):
+        if callable_handler in cls.__ui_event_handlers:
+            for i in xrange(len(cls.__ui_event_handlers)):
+                if cls.__ui_event_handlers[i] == callable_handler:
+                    del cls.__ui_event_handlers[i]
+                    return
+
+    @classmethod
+    def execute_ui_event_handlers(cls):
+        for callable_handler in cls.__ui_event_handlers:
+            callable_handler()

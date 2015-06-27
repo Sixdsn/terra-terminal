@@ -97,7 +97,8 @@ class VteObjectContainer(Gtk.HBox):
 class VteObject(Gtk.VBox):
     def __init__(self, term_id=0):
         super(Gtk.VBox, self).__init__()
-        ConfigManager.add_callback(self.update_ui)
+        # Allow UI to be updated by other events.
+        TerraHandler.add_ui_event_handler(self.update_ui)
 
         self.id = VteObjectContainer.handle_id(term_id)
         self.parent = 0
@@ -406,7 +407,7 @@ class VteObject(Gtk.VBox):
         else:
             sibling = parent.get_child1()
 
-        ConfigManager.remove_callback(self.update_ui)
+        TerraHandler.remove_ui_event_handler(self.update_ui)
         parent.remove(sibling)
         top_level = parent.get_parent()
 

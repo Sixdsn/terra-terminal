@@ -120,24 +120,6 @@ class ConfigManager:
             cls.config.write(configfile)
 
     @staticmethod
-    def add_callback(method):
-        if not method in ConfigManager.callback_list:
-            ConfigManager.callback_list.append(method)
-
-    @staticmethod
-    def remove_callback(method):
-        if method in ConfigManager.callback_list:
-            for i in xrange(len(ConfigManager.callback_list)):
-                if ConfigManager.callback_list[i] == method:
-                    del ConfigManager.callback_list[i]
-                    return
-
-    @staticmethod
-    def callback():
-        for method in ConfigManager.callback_list:
-            method()
-
-    @staticmethod
     def key_event_compare(conf_name, event):
         key_string = ConfigManager.get_conf('shortcuts', conf_name)
 
