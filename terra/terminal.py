@@ -285,7 +285,6 @@ class TerminalWin(Gtk.Window):
             ConfigManager.set_conf(self.name, 'width', self.monitor.width)
             ConfigManager.set_conf(self.name, 'height', self.monitor.height)
             ConfigManager.set_conf(self.name, 'fullscreen', self.is_fullscreen)
-            ConfigManager.set_conf(self.name, 'disabled', 'False')
 
             #we delete all tabs first to avoid unused
             #we delete all layouts first to avoid unused
@@ -303,7 +302,6 @@ class TerminalWin(Gtk.Window):
                 if button != self.radio_group_leader:
                     section = str('layout-Tabs-%d-%d'% (self.screen_id, tabid))
                     ConfigManager.set_conf(section, 'name', button.get_label())
-                    ConfigManager.set_conf(section, 'disabled', 'False')
                     tabid = tabid + 1
 
             tabid = 0
