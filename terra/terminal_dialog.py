@@ -24,6 +24,7 @@ import sys
 from gi.repository import Gtk, Gdk
 
 from terra.config import ConfigManager
+from terra.config import TerraHandler
 
 
 class ProgDialog:
@@ -43,7 +44,7 @@ class ProgDialog:
         self.dialog = self.builder.get_object('progname_dialog')
 
         self.dialog.entry_new_progname = self.builder.get_object('progname-entry_new_name')
-        if (hasattr(self.sender, 'progname') and self.sender.progname):
+        if hasattr(self.sender, 'progname') and self.sender.progname:
             self.dialog.entry_new_progname.set_text(self.sender.progname)
         else:
             self.dialog.entry_new_progname.set_text("")
