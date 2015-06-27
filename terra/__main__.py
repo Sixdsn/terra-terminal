@@ -49,7 +49,7 @@ def main(project_root=ROOT):
             if section.find('layout-screen-') != 0:
                 continue
 
-            if ConfigManager.get_conf(section, 'enabled'):
+            if not ConfigManager.get_conf(section, 'disabled'):
                 TerraHandler.Wins.create_app(section)
 
         if len(TerraHandler.Wins.get_apps()) == 0:
@@ -68,3 +68,4 @@ def main(project_root=ROOT):
 
 if __name__ == "__main__":
     main()
+
