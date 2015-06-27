@@ -278,7 +278,7 @@ class Preferences:
 
         desktop_file_source = os.path.join(TerraHandler.get_resources_path(), 'terra.desktop')
         if not os.path.exists(desktop_file_source):
-            msg = 'ERROR: Desktop file is missing: {}'.format(preferences_ui_file)
+            msg = 'ERROR: Desktop file is missing: {}'.format(desktop_file_source)
             sys.exit(msg)
 
         # TODO: Properly determine the running desktop environment.
