@@ -66,6 +66,7 @@ class TerminalWinContainer:
     def get_screen_name(self):
         screenname = str('layout-screen-%d' % self.screenid)
 
+        # TODO: Provide default values in the config manager.
         if ConfigManager.get_conf('layout', 'hide-tab-bar'):
             ConfigManager.set_conf(screenname, 'hide-tab-bar', True)
         else:
@@ -76,12 +77,14 @@ class TerminalWinContainer:
         else:
             ConfigManager.set_conf(screenname, 'hide-tab-bar-fullscreen', False)
 
-        if ConfigManager.get_conf('layout', 'vertical-position'):
+        vertical_position = ConfigManager.get_conf('layout', 'vertical-position')
+        if vertical_position:
             ConfigManager.set_conf(screenname, 'vertical-position', vertical_position)
         else:
             ConfigManager.set_conf(screenname, 'vertical-position', 150)
 
-        if ConfigManager.get_conf('layout', 'horizontal-position'):
+        horizontal_position = ConfigManager.get_conf('layout', 'horizontal-position')
+        if horizontal_position:
             ConfigManager.set_conf(screenname, 'horizontal-position', horizontal_position)
         else:
             ConfigManager.set_conf(screenname, 'horizontal-position', 150)
