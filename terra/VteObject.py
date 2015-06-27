@@ -53,6 +53,7 @@ regex_strings =[SCHEME + "//(?:" + USERPASS + "\\@)?" + HOST + PORT + URLPATH,
     "(?:mailto:)?" + USERCHARS_CLASS + "[" + USERCHARS+ ".]*\\@" + HOSTCHARS_CLASS + "+\\." + HOST,
     "(?:news:|man:|info:)[[:alnum:]\\Q^_{|}~!\"#$%&'()*+,./;:=?`\\E]+"]
 
+
 class VteObjectContainer(Gtk.HBox):
     def __init__(self, parent, bare=False, progname=None, pwd=None):
         super(VteObjectContainer, self).__init__()
@@ -87,12 +88,13 @@ class VteObjectContainer(Gtk.HBox):
     def handle_id(setter=0):
         if not hasattr(VteObjectContainer.handle_id, "counter"):
             VteObjectContainer.handle_id.counter = 0
-        if (setter != 0):
+        if setter != 0:
             ret_id = setter
         else:
             ret_id = VteObjectContainer.handle_id.counter
         VteObjectContainer.handle_id.counter = max(VteObjectContainer.handle_id.counter, setter) + 1
-        return (ret_id)
+        return ret_id
+
 
 class VteObject(Gtk.VBox):
     def __init__(self, term_id=0):
@@ -117,7 +119,6 @@ class VteObject(Gtk.VBox):
         self.hbox.pack_start(self.vscroll, False, False, 0)
         self.pack_start(self.hbox, True, True, 0)
 
-
         for regex_string in regex_strings:
             regex_obj = GLib.Regex.new(regex_string, 0, 0)
             tag = self.vte.match_add_gregex(regex_obj, 0)
@@ -137,31 +138,31 @@ class VteObject(Gtk.VBox):
         self.update_ui()
 
     def set_pwd(self, parent=None, pwd=None):
-        if (parent):
+        if parent:
             self.parent = parent.id
         start_directory = ConfigManager.get_conf('general', 'start_directory')
         if start_directory == '$home$':
             run_dir = os.environ['HOME']
         elif start_directory == '$pwd$':
-            if (pwd):
+            if pwd:
                 run_dir = pwd
             else:
                 pid = None
-                if (parent):
+                if parent:
                     pid = parent.pid[1]
-                elif (self.get_container()):
+                elif self.get_container():
                     pid = terra_utils.get_paned_parent(self.get_container().vte_list, self.parent).pid[1]
                 run_dir = terra_utils.get_pwd(pid)
-                if (not run_dir):
+                if not run_dir:
                     run_dir = os.getcwd()
         else:
             run_dir = start_directory
         self.pwd = run_dir
 
     def fork_process(self, progname):
-        if (not self.pwd):
+        if not self.pwd:
             self.set_pwd()
-        if (not progname):
+        if not progname:
             progname = ConfigManager.get_conf('general', 'start_shell_program')
         self.progname = progname
 
@@ -195,7 +196,7 @@ class VteObject(Gtk.VBox):
     def change_font_size(self, sender, factor):
         current_font = self.vte.get_font()
         current_size = current_font.get_size()
-        factor = factor + 1
+        factor += 1
         new_size = int(current_size * factor)
 
         if new_size < 2048 or new_size > 60000:
@@ -254,7 +255,7 @@ class VteObject(Gtk.VBox):
 
         if not ConfigManager.get_conf('terminal', 'use_system_font'):
             self.vte.set_font_from_string(ConfigManager.get_conf('terminal', 'font_name'))
-        if (self.pid != 0):
+        if self.pid != 0:
             self.title.set_label(terra_utils.get_running_cmd(self))
 
         self.show_all()
@@ -268,7 +269,6 @@ class VteObject(Gtk.VBox):
 
         menu_item.connect('button-press-event', handle_event)
         menu_item.connect('activate', handle_event)
-
 
     def on_button_release(self, widget, event):
         self.get_container().active_terminal = self
@@ -300,7 +300,6 @@ class VteObject(Gtk.VBox):
                 self.menu_paste = Gtk.MenuItem(t("Paste"))
                 self.menu_paste.connect("activate", lambda w: self.vte.paste_clipboard())
                 self.menu.append(self.menu_paste)
-
 
             self.menu_select_all = Gtk.MenuItem(t("Select All"))
             self.menu_select_all.connect("activate", lambda w: self.vte.select_all())
@@ -389,7 +388,7 @@ class VteObject(Gtk.VBox):
     def close_node(self, widget):
         parent = self.get_parent()
 
-        if (self in self.get_container().vte_list):
+        if self in self.get_container().vte_list:
             self.get_container().vte_list.remove(self)
         else:
             print("Issue Close Node")
@@ -479,7 +478,6 @@ class VteObject(Gtk.VBox):
         self.get_container().append_terminal(new_terminal, progname, pwd)
         parent.show_all()
         new_terminal.grab_focus()
-
 
     # direction
     # 1 = up (default)

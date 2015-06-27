@@ -96,31 +96,31 @@ class TerminalWinContainer:
 
     def app_quit(self):
         for app in self.apps:
-            if (app.quit() == False):
+            if app.quit() == False:
                 return
         sys.stdout.flush()
         sys.stderr.flush()
-        if (self.is_running):
+        if self.is_running:
             Gtk.main_quit()
 
     def remove_app(self, ext):
         if ext in self.apps:
             self.apps.remove(ext)
         self.old_apps.append(ext)
-        if (len(self.apps) == 0):
+        if len(self.apps) == 0:
             self.app_quit()
 
     def create_app(self, screenName='layout'):
         monitor = terra_utils.get_screen(screenName)
-        if (screenName == 'layout'):
+        if screenName == 'layout':
             screenName = self.get_screen_name()
-        if (monitor != None):
+        if monitor != None:
             app = TerminalWin(screenName, monitor)
-            if (not self.bind_success):
+            if not self.bind_success:
                 terra_utils.cannot_bind(app)
                 raise Exception("Can't bind Global Keys")
             app.hotkey = self.hotkey
-            if (len(self.apps) == 0):
+            if len(self.apps) == 0:
                 DbusService(app)
             self.apps.append(app)
             self.screenid = max(self.screenid, int(screenName.split('-')[2])) + 1
@@ -128,11 +128,12 @@ class TerminalWinContainer:
             print("Cannot find %s"% screenName)
 
     def get_apps(self):
-        return (self.apps)
+        return self.apps
 
     def start(self):
         self.is_running = True
         Gtk.main()
+
 
 class TerminalWin(Gtk.Window):
     def __init__(self, name, monitor):
@@ -220,10 +221,10 @@ class TerminalWin(Gtk.Window):
         added = False
         for section in ConfigManager.get_sections():
             tabs = str('layout-Tabs-%d'% self.screen_id)
-            if (section.find(tabs) == 0 and not ConfigManager.get_conf(section, 'disabled')):
+            if section.find(tabs) == 0 and not ConfigManager.get_conf(section, 'disabled'):
                 self.add_page(page_name=str(section))
                 added = True
-        if (not added):
+        if not added:
             self.add_page()
 
         for button in self.buttonbox:
@@ -234,7 +235,7 @@ class TerminalWin(Gtk.Window):
                 break
 
     def check_visible(self):
-        if (not terra_utils.is_on_visible_screen(self)):
+        if not terra_utils.is_on_visible_screen(self):
             active_monitor = self.screen.get_monitor_workarea(self.screen.get_primary_monitor())
             terra_utils.set_new_size(self, active_monitor, self.monitor)
 
@@ -277,9 +278,9 @@ class TerminalWin(Gtk.Window):
 
     def save_conf(self, keep=True):
         tabs = str('layout-Tabs-%d'% self.screen_id)
-        if (not keep):
+        if not keep:
             for section in ConfigManager.get_sections():
-                if (section.find(tabs) == 0):
+                if section.find(tabs) == 0:
                     ConfigManager.del_conf(section)
             ConfigManager.del_conf(self.name)
         else:
@@ -287,23 +288,23 @@ class TerminalWin(Gtk.Window):
             ConfigManager.set_conf(self.name, 'height', self.monitor.height)
             ConfigManager.set_conf(self.name, 'fullscreen', self.is_fullscreen)
 
-            #we delete all tabs first to avoid unused
-            #we delete all layouts first to avoid unused
+            # We delete all tabs first to avoid unused.
+            # We delete all layouts first to avoid unused.
             for section in ConfigManager.get_sections():
-                if (section.find("layout-Tabs-%d"% (self.screen_id)) == 0):
-                    # we won't delete those who are set as disabled
+                if section.find("layout-Tabs-%d" % self.screen_id) == 0:
+                    # We won't delete those who are set as disabled.
                     if not ConfigManager.get_conf(section, 'disabled'):
                         ConfigManager.del_conf(section)
-                if (section.find("layout-Child-%d"% (self.screen_id)) == 0):
+                if section.find("layout-Child-%d" % self.screen_id) == 0:
                     ConfigManager.del_conf(section)
 
-            #We add them all
+            # We add them all.
             tabid = 0
             for button in self.buttonbox:
                 if button != self.radio_group_leader:
-                    section = str('layout-Tabs-%d-%d'% (self.screen_id, tabid))
+                    section = str('layout-Tabs-%d-%d' % (self.screen_id, tabid))
                     ConfigManager.set_conf(section, 'name', button.get_label())
-                    tabid = tabid + 1
+                    tabid += 1
 
             tabid = 0
             for container in self.notebook.get_children():
@@ -319,7 +320,7 @@ class TerminalWin(Gtk.Window):
                     ConfigManager.set_conf(section, 'prog', child.progname)
                     ConfigManager.set_conf(section, 'pwd', child.pwd)
                     childid += 1
-                tabid = tabid + 1
+                tabid += 1
 
         ConfigManager.save_config()
 
@@ -327,11 +328,11 @@ class TerminalWin(Gtk.Window):
         child.pos = -1
         child.axis = axis
         child.pwd = terra_utils.get_pwd(child.pid[1])
-        if (parent):
+        if parent:
             child.pos = pos
             child.parent = parent.id
 
-    #there is a very small issue if the tabbar is visible
+    # There is a very small issue if the tabbar is visible.
     def get_paned_pos(self, tree):
         pos = tree.get_position()
         if isinstance(tree, Gtk.HPaned):
@@ -339,7 +340,7 @@ class TerminalWin(Gtk.Window):
         else:
             size = tree.get_allocation().height
         percentage = int(float(pos) / float(size) * float(10000))
-        return (percentage)
+        return percentage
 
     def rec_parents(self, tree, container):
         if not tree:
@@ -352,8 +353,8 @@ class TerminalWin(Gtk.Window):
         if isinstance(tree, Gtk.Paned):
             child1 = tree.get_child1()
             child2 = tree.get_child2()
-            if (child1):
-                if (isinstance(child1, Gtk.Paned)):
+            if child1:
+                if isinstance(child1, Gtk.Paned):
                     TerminalWin.rec_parents.im_func._pos = self.get_paned_pos(tree)
                     self.rec_parents(child1, container)
                 if isinstance(child1, VteObject):
@@ -367,19 +368,19 @@ class TerminalWin(Gtk.Window):
                         if len(container.vte_list) and container.vte_list[0].id == 0:
                             container.vte_list.pop(0)
                         for item in container.vte_list:
-                            if (item.parent == child1.id):
+                            if item.parent == child1.id:
                                 item.parent = 0
                         child1.id = 0
                         child1.parent = 0
                         container.vte_list.append(child1)
                         TerminalWin.rec_parents.im_func._first_child = child1
                     TerminalWin.rec_parents.im_func._parent = child1
-            if (child2):
+            if child2:
                 if isinstance(tree, Gtk.HPaned):
                     TerminalWin.rec_parents.im_func._axis = 'h'
                 else:
                     TerminalWin.rec_parents.im_func._axis = 'v'
-                if (isinstance(child2, Gtk.Paned)):
+                if isinstance(child2, Gtk.Paned):
                     TerminalWin.rec_parents.im_func._pos = self.get_paned_pos(tree)
                     self.rec_parents(child2, container)
                 if isinstance(child2, VteObject):
@@ -431,12 +432,12 @@ class TerminalWin(Gtk.Window):
 
     def add_page(self, page_name=None):
         container = None
-        if (page_name):
-            section=str('layout-Child-%s-0'%(page_name[len('layout-Tabs-'):]))
+        if page_name:
+            section = str('layout-Child-%s-0' % (page_name[len('layout-Tabs-'):]))
             progname = ConfigManager.get_conf(section, 'prog')
             pwd = ConfigManager.get_conf(section, 'pwd')
             container = VteObjectContainer(self, progname=progname, pwd=pwd)
-        if (not container):
+        if not container:
             container = VteObjectContainer(self)
 
         self.notebook.append_page(container, None)
@@ -466,7 +467,7 @@ class TerminalWin(Gtk.Window):
         if page_name:
             for section in ConfigManager.get_sections():
                 child = str('layout-Child-%s'%(page_name[len('layout-Tabs-'):]))
-                if (section.find(child) == 0 and section[-1:] != '0'):
+                if section.find(child) == 0 and section[-1:] != '0':
                     axis = ConfigManager.get_conf(section, "axis")[0]
                     prog = ConfigManager.get_conf(section, "prog")
                     pos = ConfigManager.get_conf(section, "pos")
@@ -490,7 +491,7 @@ class TerminalWin(Gtk.Window):
                     self.notebook.set_current_page(page_no)
                     self.get_active_terminal().grab_focus()
                     return
-                page_no = page_no + 1
+                page_no += 1
 
     def page_button_mouse_event(self, button, event):
         if event.button != 3:
@@ -526,7 +527,7 @@ class TerminalWin(Gtk.Window):
 
         # don't forget "radio_group_leader"
         if button_count <= 2:
-            if (ConfigManager.get_conf('general', 'spawn_term_on_last_close')):
+            if ConfigManager.get_conf('general', 'spawn_term_on_last_close'):
                 self.add_page()
             else:
                 return self.quit()
@@ -541,7 +542,7 @@ class TerminalWin(Gtk.Window):
                     last_button = self.buttonbox.get_children()[-1]
                     last_button.set_active(True)
                     return True
-                page_no = page_no + 1
+                page_no += 1
 
     def get_screen_rectangle(self):
         display = self.screen.get_display()
@@ -556,7 +557,7 @@ class TerminalWin(Gtk.Window):
         self.set_decorated(ConfigManager.get_conf('window', 'use_border'))
         self.set_skip_taskbar_hint(ConfigManager.get_conf('general', 'hide_from_taskbar'))
 
-        #hide/show tabbar
+        # hide/show tabbar.
         if ConfigManager.get_conf(self.name, 'hide-tab-bar'):
             self.tabbar.hide()
             self.tabbar.set_no_show_all(True)
@@ -593,13 +594,13 @@ class TerminalWin(Gtk.Window):
             if vert != None and vert <= 100:
                 height = self.monitor.height
                 vertical_position = vert * screen_rectangle.height / 100
-                #top
+                # top
                 if vertical_position - (height / 2) < 0:
                     vertical_position = screen_rectangle.y + 0
-                #bottom
+                # bottom
                 elif vertical_position + (height / 2) > screen_rectangle.height:
                     vertical_position = screen_rectangle.y + screen_rectangle.height - height
-                #center
+                # center
                 else:
                     vertical_position = screen_rectangle.y + vertical_position - (height / 2)
 
@@ -607,13 +608,13 @@ class TerminalWin(Gtk.Window):
             if horiz != None and horiz <= 100:
                 width = self.monitor.width - 1
                 horizontal_position = horiz * screen_rectangle.width / 100
-                #left
+                # left
                 if horizontal_position - (width / 2) < 0:
                     horizontal_position = screen_rectangle.x + 0
-                #right
+                # right
                 elif horizontal_position + (width / 2) > screen_rectangle.width:
                     horizontal_position = screen_rectangle.x + screen_rectangle.width - width
-                #center
+                # center
                 else:
                     horizontal_position = screen_rectangle.x + horizontal_position - (width / 2)
             self.unfullscreen()
@@ -736,8 +737,8 @@ class TerminalWin(Gtk.Window):
             page_button_list = self.buttonbox.get_children()[1:]
 
             for i in range(len(page_button_list)):
-                if (page_button_list[i].get_active() == True):
-                    if (i + 1 < len(page_button_list)):
+                if page_button_list[i].get_active() == True:
+                    if (i + 1) < len(page_button_list):
                         page_button_list[i+1].set_active(True)
                     else:
                         page_button_list[0].set_active(True)
@@ -851,7 +852,7 @@ class TerminalWin(Gtk.Window):
             win_rect = self.get_screen_rectangle()
         if self.get_window() != None:
             self.get_window().enable_synchronized_configure()
-        if i < step + 1:
+        if i < (step + 1):
             self.resize(win_rect.width, int(((win_rect.height/step) * i)))
             self.queue_resize()
             self.resizer.set_property('position', int(((win_rect.height/step) * i)))
@@ -866,7 +867,7 @@ class TerminalWin(Gtk.Window):
         if self.slide_effect_running:
             return
         event_time = self.hotkey.get_current_event_time()
-        if(self.losefocus_time and self.losefocus_time >= event_time):
+        if self.losefocus_time and self.losefocus_time >= event_time:
             return
 
         if self.get_visible():

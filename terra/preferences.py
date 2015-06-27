@@ -99,7 +99,6 @@ class Preferences:
             self.dir_custom.set_text(start_directory)
             self.dir_custom.set_sensitive(True)
 
-
         # TAB: Window
         boolean_options = [
             'use_border',
@@ -156,7 +155,6 @@ class Preferences:
 
         self.scrollback_unlimited.connect('toggled', lambda w: self.toggle_sensitive(self.scrollback_unlimited, [self.scrollback_lines]))
 
-
         # TAB: Keyboard Shortcuts
         # Store all keyboard shortcut entry boxes in array for connecting signals together.
         key_entries = [
@@ -199,7 +197,6 @@ class Preferences:
         self.restore_defaults = builder.get_object('restore_defaults')
         self.restore_defaults.connect('clicked', lambda w: self.restore_defaults_cb())
 
-
         # TAB: About
         self.logo = builder.get_object('terra_logo')
         logo_path = os.path.join(TerraHandler.get_resources_path(), 'terra.svg')
@@ -218,48 +215,42 @@ class Preferences:
         self.report_bug = builder.get_object('report_bug')
         self.report_bug.connect('clicked', lambda w: Gtk.show_uri(self.window.get_screen(), 'https://github.com/Sixdsn/terra-terminal/issues', GdkX11.x11_get_server_time(self.window.get_window())))
 
-
     def clear_key_entry(self, widget, event):
         if event.type == Gdk.EventType._2BUTTON_PRESS:
             widget.set_text("")
 
-
     def toggle_sensitive(self, source_object, target_objects):
         for target_object in target_objects:
             target_object.set_sensitive(not source_object.get_active())
-
 
     def restore_defaults_cb(self):
         for key in ConfigManager.defaults.options('shortcuts'):
             widget = getattr(self, key)
             widget.set_text(ConfigManager.defaults.get('shortcuts', key))
 
-
     def generate_key_string(self, widget, event):
         key_str = ''
 
-        if ((Gdk.ModifierType.CONTROL_MASK & event.state) == Gdk.ModifierType.CONTROL_MASK):
-            key_str = key_str + '<Control>'
+        if (Gdk.ModifierType.CONTROL_MASK & event.state) == Gdk.ModifierType.CONTROL_MASK:
+            key_str += '<Control>'
 
-        if ((Gdk.ModifierType.MOD1_MASK & event.state) == Gdk.ModifierType.MOD1_MASK):
-            key_str = key_str + '<Alt>'
+        if (Gdk.ModifierType.MOD1_MASK & event.state) == Gdk.ModifierType.MOD1_MASK:
+            key_str += '<Alt>'
 
-        if ((Gdk.ModifierType.SHIFT_MASK & event.state) == Gdk.ModifierType.SHIFT_MASK):
-            key_str = key_str + '<Shift>'
+        if (Gdk.ModifierType.SHIFT_MASK & event.state) == Gdk.ModifierType.SHIFT_MASK:
+            key_str += '<Shift>'
 
-        if ((Gdk.ModifierType.SUPER_MASK & event.state) == Gdk.ModifierType.SUPER_MASK):
-            key_str = key_str + '<Super>'
+        if (Gdk.ModifierType.SUPER_MASK & event.state) == Gdk.ModifierType.SUPER_MASK:
+            key_str += '<Super>'
 
         key_str = key_str + Gdk.keyval_name(event.keyval)
 
         widget.set_text(key_str)
 
-
     def show(self):
         if not self.is_running:
             self.init_ui()
         self.window.show_all()
-
 
     def on_apply_clicked(self, widget):
         # TODO: Clean!
@@ -342,7 +333,6 @@ class Preferences:
             step_time = 10
         ConfigManager.set_conf('window', 'animation_step_time', step_time)
 
-
         # TAB: Terminal
         boolean_options = [
             'use_system_font',
@@ -371,7 +361,6 @@ class Preferences:
 
         ConfigManager.set_conf('terminal', 'scrollback_lines', str(scrollback_line))
 
-
         # TAB: Shortcuts
         for key in ConfigManager.defaults.options('shortcuts'):
             widget = getattr(self, key)
@@ -386,7 +375,6 @@ class Preferences:
         self.on_apply_clicked(self.btn_ok)
         self.window.hide()
         ConfigManager.disable_losefocus_temporary = False
-
 
     def on_cancel_clicked(self, widget):
         self.is_running = False

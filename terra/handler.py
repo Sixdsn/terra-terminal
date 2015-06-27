@@ -3,11 +3,11 @@ Utilities for terra terminal.
 """
 
 import os
-import sys
 
 from pkg_resources import DistributionNotFound, Requirement, resource_filename, resource_isdir
 
 from terra import (__version__)
+
 
 class TerraHandler:
     version = __version__
