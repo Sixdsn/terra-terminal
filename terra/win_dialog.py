@@ -44,11 +44,11 @@ class WinDialog:
         self.dialog = self.builder.get_object('win_dialog')
 
         self.window = self.sender.get_container().parent
-        self.dialog.v_alig = self.builder.get_object('v_alig')
-        self.dialog.v_alig.set_active(int(ConfigManager.get_conf(self.window.name, 'vertical-position')) / 50)
+        self.dialog.v_align = self.builder.get_object('v_align')
+        self.dialog.v_align.set_active(int(ConfigManager.get_conf(self.window.name, 'vertical-position')) / 50)
 
-        self.dialog.h_alig = self.builder.get_object('h_alig')
-        self.dialog.h_alig.set_active(int(ConfigManager.get_conf(self.window.name, 'horizontal-position')) / 50)
+        self.dialog.h_align = self.builder.get_object('h_align')
+        self.dialog.h_align.set_active(int(ConfigManager.get_conf(self.window.name, 'horizontal-position')) / 50)
 
         self.chk_hide_tab_bar = self.builder.get_object('chk_hide_tab_bar')
         self.chk_hide_tab_bar.set_active(ConfigManager.get_conf(self.window.name, 'hide-tab-bar'))
@@ -78,8 +78,8 @@ class WinDialog:
         del self
 
     def update(self):
-        ConfigManager.set_conf(self.window.name, 'vertical-position', self.dialog.v_alig.get_active() * 50)
-        ConfigManager.set_conf(self.window.name, 'horizontal-position', self.dialog.h_alig.get_active() * 50)
+        ConfigManager.set_conf(self.window.name, 'vertical-position', self.dialog.v_align.get_active() * 50)
+        ConfigManager.set_conf(self.window.name, 'horizontal-position', self.dialog.h_align.get_active() * 50)
         ConfigManager.set_conf(self.window.name, 'hide-tab-bar', self.chk_hide_tab_bar.get_active())
         ConfigManager.set_conf(self.window.name, 'hide-tab-bar-fullscreen', self.chk_hide_tab_bar_fullscreen.get_active())
         self.window.update_ui()
