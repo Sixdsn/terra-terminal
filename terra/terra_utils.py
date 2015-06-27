@@ -39,7 +39,7 @@ def my_sorted(elems):
         parent = get_paned_parent(_elems, val.parent)
         if parent and parent in _elems:
             _elems.append(val)
-            if (val in liste):
+            if val in liste:
                 liste.remove(val)
             for vale in liste:
                 if vale.parent == val.parent and vale.id <= min(liste, key=lambda a: attrgetter('id')(a)).id:
@@ -49,17 +49,17 @@ def my_sorted(elems):
 
     _elems = []
     liste = list(elems)
-    while (len(liste)):
+    while len(liste):
         liste.sort(key=lambda a: attrgetter('id')(a))
         for val in liste:
             if val.id == 0:
                 _elems.append(val)
-                if (val in liste):
+                if val in liste:
                     liste.remove(val)
                 break
             if check_heritage(val, elems, _elems, liste):
                 break
-    return (_elems)
+    return _elems
 
 def get_screen(name):
     if ConfigManager.get_conf(name, 'disabled'):
@@ -68,7 +68,7 @@ def get_screen(name):
     posy = ConfigManager.get_conf(name, 'posy')
     width = ConfigManager.get_conf(name, 'width')
     height = ConfigManager.get_conf(name, 'height')
-    if (posx == None or posy == None or width == None or height == None):
+    if posx == None or posy == None or width == None or height == None:
         posx = ConfigManager.get_conf('layout', 'posx')
         posy = ConfigManager.get_conf('layout', 'posy')
         width = ConfigManager.get_conf('layout', 'width')
@@ -97,11 +97,11 @@ def get_pwd(pid):
 
 def get_prog_values(pid, pwd):
     value = " ".join(commands.getstatusoutput("ps -p " + str(pid) + " o user=,cmd=,etime=")[1].split()).split(' ')
-    return(str("%s@%s $>%s %s"% (value[0], pwd, str(" ".join(value[1:-1])), value[-1])))
+    return str("%s@%s $>%s %s"% (value[0], pwd, str(" ".join(value[1:-1])), value[-1]))
 
 def get_running_cmd(terminal):
     pwd = get_pwd(terminal.pid[1])
-    if (not pwd):
+    if not pwd:
         pwd = os.uname()[1]
     ret = str("%s@%s $>%s"% (os.environ['USER'], pwd, "POUET"))#terminal.progname))
     try:
@@ -115,7 +115,7 @@ def get_running_cmd(terminal):
     return (ret)
 
 def set_new_size(terminal, minus, win_rect):
-    if (minus.x != terminal.get_screen_rectangle().x):
+    if minus.x != terminal.get_screen_rectangle().x:
         terminal.monitor.x = minus.x + (float(minus.width) / float(win_rect.width) * float(terminal.monitor.x - win_rect.x))
         terminal.monitor.y = minus.y + (float(minus.height) / float(win_rect.height) * float(terminal.monitor.y - win_rect.y))
         terminal.monitor.width = float(minus.width) / float(win_rect.width) * float(terminal.monitor.width)
@@ -131,11 +131,11 @@ def move_left_screen(terminal):
             screen = disp.get_screen(screen_num)
             for monitor_num in range(screen.get_n_monitors()):
                 monitor = screen.get_monitor_geometry(monitor_num)
-                if (monitor.x < minus.x and minus.x == win_rect.x):
+                if monitor.x < minus.x and minus.x == win_rect.x:
                     minus = monitor
-                elif (minus.x < monitor.x and monitor.x < win_rect.x):
+                elif minus.x < monitor.x and monitor.x < win_rect.x:
                     minus = monitor
-    if (set_new_size(terminal, minus, win_rect)):
+    if set_new_size(terminal, minus, win_rect):
         terminal.update_ui()
 
 def move_right_screen(terminal):
@@ -146,16 +146,16 @@ def move_right_screen(terminal):
             screen = disp.get_screen(screen_num)
             for monitor_num in range(screen.get_n_monitors()):
                 monitor = screen.get_monitor_geometry(monitor_num)
-                if (minus.x < monitor.x and minus.x == win_rect.x):
+                if minus.x < monitor.x and minus.x == win_rect.x:
                     minus = monitor
-                elif (minus.x > monitor.x and monitor.x > win_rect.x):
+                elif minus.x > monitor.x and monitor.x > win_rect.x:
                     minus = monitor
-    if (set_new_size(terminal, minus, win_rect)):
+    if set_new_size(terminal, minus, win_rect):
         terminal.update_ui()
 
 def is_in_screen(minus, monitor):
-    if (minus.x >= monitor.x and minus.y >= monitor.y):
-        if (minus.x + minus.width <=  monitor.x + monitor.width and minus.y + minus.height <=  monitor.y + monitor.height):
+    if minus.x >= monitor.x and minus.y >= monitor.y:
+        if minus.x + minus.width <=  monitor.x + monitor.width and minus.y + minus.height <=  monitor.y + monitor.height:
             return True
     return False
 
@@ -166,6 +166,6 @@ def is_on_visible_screen(terminal):
             screen = disp.get_screen(screen_num)
             for monitor_num in range(screen.get_n_monitors()):
                 monitor = screen.get_monitor_geometry(monitor_num)
-                if (is_in_screen(minus, monitor)):
+                if is_in_screen(minus, monitor):
                     return True
     return False

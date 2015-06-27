@@ -88,12 +88,12 @@ class VteObjectContainer(Gtk.HBox):
     def handle_id(setter=0):
         if not hasattr(VteObjectContainer.handle_id, "counter"):
             VteObjectContainer.handle_id.counter = 0
-        if (setter != 0):
+        if setter != 0:
             ret_id = setter
         else:
             ret_id = VteObjectContainer.handle_id.counter
         VteObjectContainer.handle_id.counter = max(VteObjectContainer.handle_id.counter, setter) + 1
-        return (ret_id)
+        return ret_id
 
 
 class VteObject(Gtk.VBox):
@@ -138,31 +138,31 @@ class VteObject(Gtk.VBox):
         self.update_ui()
 
     def set_pwd(self, parent=None, pwd=None):
-        if (parent):
+        if parent:
             self.parent = parent.id
         start_directory = ConfigManager.get_conf('general', 'start_directory')
         if start_directory == '$home$':
             run_dir = os.environ['HOME']
         elif start_directory == '$pwd$':
-            if (pwd):
+            if pwd:
                 run_dir = pwd
             else:
                 pid = None
-                if (parent):
+                if parent:
                     pid = parent.pid[1]
-                elif (self.get_container()):
+                elif self.get_container():
                     pid = terra_utils.get_paned_parent(self.get_container().vte_list, self.parent).pid[1]
                 run_dir = terra_utils.get_pwd(pid)
-                if (not run_dir):
+                if not run_dir:
                     run_dir = os.getcwd()
         else:
             run_dir = start_directory
         self.pwd = run_dir
 
     def fork_process(self, progname):
-        if (not self.pwd):
+        if not self.pwd:
             self.set_pwd()
-        if (not progname):
+        if not progname:
             progname = ConfigManager.get_conf('general', 'start_shell_program')
         self.progname = progname
 
@@ -255,7 +255,7 @@ class VteObject(Gtk.VBox):
 
         if not ConfigManager.get_conf('terminal', 'use_system_font'):
             self.vte.set_font_from_string(ConfigManager.get_conf('terminal', 'font_name'))
-        if (self.pid != 0):
+        if self.pid != 0:
             self.title.set_label(terra_utils.get_running_cmd(self))
 
         self.show_all()
@@ -388,7 +388,7 @@ class VteObject(Gtk.VBox):
     def close_node(self, widget):
         parent = self.get_parent()
 
-        if (self in self.get_container().vte_list):
+        if self in self.get_container().vte_list:
             self.get_container().vte_list.remove(self)
         else:
             print("Issue Close Node")
