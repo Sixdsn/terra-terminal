@@ -207,7 +207,7 @@ class Preferences:
         self.logo.set_from_pixbuf(self.logo_buffer)
 
         self.version = builder.get_object('version')
-        self.version.set_label(t("Version: ") + ConfigManager.version)
+        self.version.set_label(t("Version: ") + TerraHandler.version)
 
         self.webpage = builder.get_object('webpage')
         self.webpage.connect('clicked', lambda w: Gtk.show_uri(self.window.get_screen(), 'http://terraterminal.org', GdkX11.x11_get_server_time(self.window.get_window())))

@@ -7,8 +7,10 @@ import sys
 
 from pkg_resources import DistributionNotFound, Requirement, resource_filename, resource_isdir
 
+from terra import (__version__)
 
 class TerraHandler:
+    version = __version__
     __root_path = ''
     __config_path = ''
 

@@ -25,13 +25,11 @@ import os
 
 from gi.repository import Gdk
 
-from terra import (__version__)
 from terra.defaults import ConfigDefaults
 from terra.handler import TerraHandler
 
 
 class ConfigManager:
-    version = __version__
     config_file_name = 'main.cfg'
 
     defaults = ConfigDefaults
