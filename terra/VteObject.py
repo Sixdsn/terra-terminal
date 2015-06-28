@@ -25,7 +25,7 @@ import threading
 from gi.repository import Gtk, Vte, GLib, Gdk, GdkX11, GObject
 
 import terra.terra_utils as terra_utils
-from terra.preferences import Preferences
+from terra.interfaces.preferences import Preferences
 from terra.config import ConfigManager
 from terra.handler import TerraHandler
 from terra.i18n import t
