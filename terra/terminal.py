@@ -42,7 +42,6 @@ class TerminalWinContainer:
         global_key_string = ConfigManager.get_conf('shortcuts', 'global_key')
         if global_key_string:
             self.bind_success = self.hotkey.bind(global_key_string, lambda w: self.show_hide(), None)
-
         self.apps = []
         self.old_apps = []
         self.screenid = 0
@@ -113,14 +112,13 @@ class TerminalWinContainer:
             self.app_quit()
 
     def create_app(self, screenName='layout'):
+        if not self.bind_success:
+            raise Exception("Can't bind Global Keys: Another Instance of Terra is probably running")
         monitor = terra_utils.get_screen(screenName)
         if screenName == 'layout':
             screenName = self.get_screen_name()
         if monitor is not None:
             app = TerminalWin(screenName, monitor)
-            if not self.bind_success:
-                terra_utils.cannot_bind(app)
-                raise Exception("Can't bind Global Keys")
             app.hotkey = self.hotkey
             if len(self.apps) == 0:
                 DbusService(app)
