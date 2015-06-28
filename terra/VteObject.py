@@ -30,7 +30,7 @@ from terra.config import ConfigManager
 from terra.handler import TerraHandler
 from terra.i18n import t
 from terra.terminal_dialog import ProgDialog
-from terra.win_dialog import WinDialog
+from terra.interfaces.win_dialog import WinDialog
 
 
 # this regex strings taken from pantheon-terminal
