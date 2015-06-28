@@ -454,7 +454,8 @@ class TerminalWin(Gtk.Window):
             if button != self.radio_group_leader:
                 page_count += 1
 
-        tab_name = ConfigManager.get_conf(page_name, 'name')
+        if page_name is not None:
+            tab_name = ConfigManager.get_conf(page_name, 'name')
         if page_name is None or tab_name is None:
             tab_name = t("Terminal ") + str(page_count + 1)
 

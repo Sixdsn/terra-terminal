@@ -64,8 +64,6 @@ class ConfigManager:
         try:
             value = ConfigManager.config.get(section, option)
         except ConfigParser.Error:
-            print("[DEBUG] Config section '%s' has no option named '%s'." %
-                  (section, option))
             return None
 
         if option == 'select_by_word':
@@ -88,7 +86,6 @@ class ConfigManager:
         try:
             ConfigManager.config.set(section, option, str(value))
         except ConfigParser.NoSectionError:
-            print("[DEBUG] No section '%s'." % section)
             ConfigManager.config.add_section(section)
             ConfigManager.config.set(section, option, str(value))
         except ConfigParser.Error:
