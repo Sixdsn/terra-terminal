@@ -24,12 +24,13 @@ import sys
 from gi.repository import Gtk, Gdk, GdkPixbuf, GObject, GdkX11
 
 import terra.globalhotkeys
+
 import terra.terra_utils as terra_utils
 from terra.config import ConfigManager
 from terra.dbusservice import DbusService
 from terra.handler import TerraHandler
 from terra.i18n import t
-from terra.rename_dialog import RenameDialog
+from terra.interfaces.rename_dialog import RenameDialog
 from terra.VteObject import VteObjectContainer, VteObject
 
 
