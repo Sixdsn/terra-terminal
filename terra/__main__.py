@@ -1,4 +1,3 @@
-#!/usr/bin/python
 # -*- coding: utf-8; -*-
 """
 Copyright (C) 2013 - Arnaud SOURIOUX <six.dsn@gmail.com>
@@ -64,7 +63,3 @@ def main(project_root=ROOT):
         print("Exception: {}".format(e))
         TerraHandler.Wins.app_quit()
         sys.exit(1)
-
-
-if __name__ == "__main__":
-    main()

@@ -1,4 +1,3 @@
-#!/usr/bin/python
 # -*- coding: utf-8; -*-
 """
 Copyright (C) 2012 - Ozcan ESEN <ozcanesen~gmail.com>

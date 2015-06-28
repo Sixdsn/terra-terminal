@@ -1,4 +1,3 @@
-#!/usr/bin/python
 # -*- coding: utf-8; -*-
 """
 Copyright (C) 2013 - Arnaud SOURIOUX <six.dsn@gmail.com>
