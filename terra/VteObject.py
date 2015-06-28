@@ -29,7 +29,7 @@ from terra.preferences import Preferences
 from terra.config import ConfigManager
 from terra.handler import TerraHandler
 from terra.i18n import t
-from terra.terminal_dialog import ProgDialog
+from terra.interfaces.prog_dialog import ProgDialog
 from terra.interfaces.win_dialog import WinDialog
 
 
