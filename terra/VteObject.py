@@ -205,7 +205,7 @@ class VteObject(Gtk.VBox):
         current_font.set_size(new_size)
         self.vte.set_font(current_font)
 
-    def on_child_exited(self, event):
+    def on_child_exited(self, event, osef):
         self.fork_process(ConfigManager.get_conf('general', 'start_shell_program'))
 
     def update_ui(self):
