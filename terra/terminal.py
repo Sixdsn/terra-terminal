@@ -65,7 +65,6 @@ class TerminalWinContainer:
 
     def get_screen_name(self):
         screenname = str('layout-screen-%d' % self.screenid)
-
         # TODO: Provide default values in the config manager.
         if ConfigManager.get_conf('layout', 'hide-tab-bar'):
             ConfigManager.set_conf(screenname, 'hide-tab-bar', True)
@@ -262,6 +261,7 @@ class TerminalWin(Gtk.Window):
         if not self.is_fullscreen and winpos[0] > 0 and winpos[1] > 0:
             self.monitor.x = winpos[0]
             self.monitor.y = winpos[1]
+            self.update_resizer(window, event)
             ConfigManager.set_conf(self.name, 'posx', winpos[0])
             ConfigManager.set_conf(self.name, 'posy', winpos[1])
 
@@ -287,6 +287,9 @@ class TerminalWin(Gtk.Window):
                     ConfigManager.del_conf(section)
             ConfigManager.del_conf(self.name)
         else:
+            screen_rectangle = self.get_allocation()
+            self.monitor.height = screen_rectangle.height
+            self.monitor.width = screen_rectangle.width
             ConfigManager.set_conf(self.name, 'width', self.monitor.width)
             ConfigManager.set_conf(self.name, 'height', self.monitor.height)
             ConfigManager.set_conf(self.name, 'fullscreen', self.is_fullscreen)
