@@ -31,7 +31,7 @@ defaultValues = {
 
         'separator_size': '2',
 
-        'hide_from_taskbar': True,
+        'hide_from_taskbar': False,
         'hide_on_start': False,
 
         'select_by_word': 'LUEtWmEtejAtOSwuLz8lJiM6Xw==',  # base64 encoded
@@ -41,7 +41,7 @@ defaultValues = {
 
     'window': {
         # Window - General
-        'use_border': False,
+        'use_border': True,
         'always_on_top': False,
         'hide_on_losefocus': False,
 
