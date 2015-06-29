@@ -30,7 +30,8 @@ from terra.terminal import TerminalWinContainer
 
 # Add the script root the the PYTHONPATH environment variable.
 ROOT = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
-sys.path.append(ROOT)
+if ROOT not in sys.path:
+    sys.path.append(ROOT)
 
 
 def main(project_root=ROOT):
