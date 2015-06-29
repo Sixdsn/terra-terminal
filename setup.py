@@ -104,6 +104,9 @@ setup(
             'terra = terra.__main__:main'
         ],
     },
+    install_requires=[
+        'PyYAML',
+    ],
     data_files=[
         ('share/icons/hicolor/scalable/apps', ['terra/resources/terra.svg']),
         ('share/applications', ['terra/resources/terra.desktop'])
