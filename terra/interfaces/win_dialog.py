@@ -24,7 +24,7 @@ import sys
 from gi.repository import Gtk, Gdk
 
 from terra.config import ConfigManager
-from terra.handler import TerraHandler
+from terra.handlers import TerraHandler
 
 
 class WinDialog:

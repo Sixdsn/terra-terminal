@@ -25,7 +25,7 @@ import sys
 os.putenv('LIBOVERLAY_SCROLLBAR', '0')
 
 from terra.config import ConfigManager
-from terra.handler import TerraHandler
+from terra.handlers import TerraHandler
 from terra.terminal import TerminalWinContainer
 
 # Add the script root the the PYTHONPATH environment variable.

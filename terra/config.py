@@ -23,7 +23,7 @@ import ConfigParser
 import os
 
 from terra.defaults import ConfigDefaults
-from terra.handler import TerraHandler
+from terra.handlers import TerraHandler
 
 
 class ConfigManager:

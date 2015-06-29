@@ -1,5 +1,5 @@
 """
-Utilities for terra terminal.
+Contains the main handler for terra terminal.
 """
 
 import os
