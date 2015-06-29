@@ -32,7 +32,7 @@ ConfigDefaults = {
         'hide_from_taskbar': False,
         'hide_on_start': False,
 
-        'select_by_word': 'LUEtWmEtejAtOSwuLz8lJiM6Xw==',  # base64 encoded
+        'select_by_word': '-A-Za-z0-9,./?%&#:_',
         'start_shell_program': os.getenv('SHELL', '/bin/sh'),
         'start_directory': '$home$',
     },
