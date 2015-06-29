@@ -25,12 +25,12 @@ import threading
 from gi.repository import Gtk, Vte, GLib, Gdk, GdkX11, GObject
 
 import terra.terra_utils as terra_utils
-from terra.preferences import Preferences
+from terra.interfaces.preferences import Preferences
 from terra.config import ConfigManager
 from terra.handler import TerraHandler
 from terra.i18n import t
-from terra.terminal_dialog import ProgDialog
-from terra.win_dialog import WinDialog
+from terra.interfaces.prog_dialog import ProgDialog
+from terra.interfaces.win_dialog import WinDialog
 
 
 # this regex strings taken from pantheon-terminal
