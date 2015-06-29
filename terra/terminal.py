@@ -37,7 +37,7 @@ class TerminalWinContainer:
 
         global_key_string = ConfigManager.get_conf('shortcuts', 'global_key')
         if global_key_string:
-            self.bind_success = self.hotkey.bind(global_key_string, lambda w: self.show_hide(), None)
+            self.bind_success = self.hotkey.bind(global_key_string, lambda w: self.show_hide())
         self.apps = []
         self.old_apps = []
         self.screenid = 0
