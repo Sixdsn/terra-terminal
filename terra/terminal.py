@@ -93,8 +93,7 @@ class TerminalWinContainer:
 
     def app_quit(self):
         for app in self.apps:
-            if not app.quit():
-                return
+            app.quit()
         sys.stdout.flush()
         sys.stderr.flush()
         if self.is_running:
