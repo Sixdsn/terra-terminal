@@ -41,25 +41,19 @@ def main(project_root=ROOT):
     TerraHandler(project_root)
     ConfigManager()  # TODO: Initialization should not be required!
 
-    try:
-        TerraHandler.Wins = TerminalWinContainer()
+    TerraHandler.Wins = TerminalWinContainer()
 
-        for section in ConfigManager.get_sections():
-            if section.find('layout-screen-') != 0:
-                continue
+    for section in ConfigManager.get_sections():
+        if section.find('layout-screen-') != 0:
+            continue
 
-            if not ConfigManager.get_conf(section, 'disabled'):
-                TerraHandler.Wins.create_app(section)
+        if not ConfigManager.get_conf(section, 'disabled'):
+            TerraHandler.Wins.create_app(section)
 
-        if len(TerraHandler.Wins.get_apps()) == 0:
-            TerraHandler.Wins.create_app()
+    if len(TerraHandler.Wins.get_apps()) == 0:
+        TerraHandler.Wins.create_app()
 
-        if len(TerraHandler.Wins.get_apps()) == 0:
-            sys.exit('Cannot initiate any screen')
+    if len(TerraHandler.Wins.get_apps()) == 0:
+        sys.exit('Cannot initiate any screen')
 
-        TerraHandler.Wins.start()
-
-    except Exception as e:
-        print("Exception: {}".format(e))
-        TerraHandler.Wins.app_quit()
-        sys.exit(1)
+    TerraHandler.Wins.start()
