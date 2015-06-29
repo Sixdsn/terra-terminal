@@ -51,11 +51,6 @@ class ConfigManager:
 
     @classmethod
     def get_sections(cls):
-        # TODO: Remove! For some reason, on my setup the `sections()` method
-        # raises a "tuple assignment index out of range" exception.
-        # Reading items from the config seems to solve the issue.
-        cls.config.options('general')
-
         return cls.config.sections()
 
     @staticmethod
