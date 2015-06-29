@@ -357,7 +357,10 @@ class TerminalWin(Gtk.Window):
                     pwd = ConfigManager.get_conf(section, "pwd")
                     term_id = int(ConfigManager.get_conf(section, "id"))
                     parent_vte = terra_utils.get_paned_parent(container.vte_list, int(ConfigManager.get_conf(section, "parent")))
-                    parent_vte.split_axis(parent_vte, axis=axis, split=pos, progname=prog, term_id=term_id, pwd=pwd)
+                    if parent_vte:
+                        parent_vte.split_axis(parent_vte, axis=axis, split=pos, progname=prog, term_id=term_id, pwd=pwd)
+                    else:
+                        print("DEBUG: no parent found for section: %s"% section)
                     self.update_ui()
 
     def get_active_terminal(self):
