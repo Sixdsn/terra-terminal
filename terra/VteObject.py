@@ -218,7 +218,7 @@ class VteObject(Gtk.VBox):
         if ConfigManager.get_conf('terminal', 'scrollback_unlimited'):
             self.vte.set_scrollback_lines(-1)
         else:
-            self.vte.set_scrollback_lines(ConfigManager.get_conf('terminal', 'scrollback_lines'))
+            self.vte.set_scrollback_lines(int(ConfigManager.get_conf('terminal', 'scrollback_lines')))
 
         self.vte.set_scroll_on_output(ConfigManager.get_conf('terminal', 'scroll_on_output'))
 

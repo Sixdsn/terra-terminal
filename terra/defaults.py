@@ -17,11 +17,10 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>
 """
 
-import ConfigParser
 import os
 
 # @TODO: Rename and regroup settings.
-defaultValues = {
+ConfigDefaults = {
     'general': {
         # General
         # 'run_on_startup': False,
@@ -103,6 +102,7 @@ defaultValues = {
 
     'layout': {
         # Layout default settings.
+        'disabled': False,
         'width': 1280,
         'height': 1024,
         'posx': 0,
@@ -115,10 +115,3 @@ defaultValues = {
         'hide-tab-bar': False,
     },
 }
-
-# Create ConfigDefaults object containing the application default settings.
-ConfigDefaults = ConfigParser.SafeConfigParser(allow_no_value=True)
-for section in defaultValues:
-    ConfigDefaults.add_section(section)
-    for option in defaultValues[section]:
-        ConfigDefaults.set(section, option, str(defaultValues[section][option]))

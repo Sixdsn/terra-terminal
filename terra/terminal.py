@@ -40,7 +40,7 @@ class TerminalWinContainer:
             self.bind_success = self.hotkey.bind(global_key_string, lambda w: self.show_hide())
         self.apps = []
         self.old_apps = []
-        self.screenid = 0
+        self.screen_id = 0
         self.on_doing = False
         self.is_running = False
 
@@ -59,31 +59,7 @@ class TerminalWinContainer:
             self.on_doing = False
 
     def get_screen_name(self):
-        screenname = str('layout-screen-%d' % self.screenid)
-        # TODO: Provide default values in the config manager.
-        if ConfigManager.get_conf('layout', 'hide-tab-bar'):
-            ConfigManager.set_conf(screenname, 'hide-tab-bar', True)
-        else:
-            ConfigManager.set_conf(screenname, 'hide-tab-bar', False)
-
-        if ConfigManager.get_conf('layout', 'hide-tab-bar-fullscreen'):
-            ConfigManager.set_conf(screenname, 'hide-tab-bar-fullscreen', True)
-        else:
-            ConfigManager.set_conf(screenname, 'hide-tab-bar-fullscreen', False)
-
-        vertical_position = ConfigManager.get_conf('layout', 'vertical-position')
-        if vertical_position:
-            ConfigManager.set_conf(screenname, 'vertical-position', vertical_position)
-        else:
-            ConfigManager.set_conf(screenname, 'vertical-position', 150)
-
-        horizontal_position = ConfigManager.get_conf('layout', 'horizontal-position')
-        if horizontal_position:
-            ConfigManager.set_conf(screenname, 'horizontal-position', horizontal_position)
-        else:
-            ConfigManager.set_conf(screenname, 'horizontal-position', 150)
-
-        return screenname
+        return str('layout-screen-%d' % self.screen_id)
 
     def save_conf(self):
         for app in self.apps:
@@ -106,21 +82,24 @@ class TerminalWinContainer:
         if len(self.apps) == 0:
             self.app_quit()
 
-    def create_app(self, screenName='layout'):
+    def create_app(self, screen_name='layout'):
         if not self.bind_success:
             raise Exception("Can't bind Global Keys: Another Instance of Terra is probably running")
-        monitor = terra_utils.get_screen(screenName)
-        if screenName == 'layout':
-            screenName = self.get_screen_name()
+
+        monitor = terra_utils.get_screen(screen_name)
+
+        if screen_name == 'layout':
+            screen_name = self.get_screen_name()
+
         if monitor is not None:
-            app = TerminalWin(screenName, monitor)
+            app = TerminalWin(screen_name, monitor)
             app.hotkey = self.hotkey
             if len(self.apps) == 0:
                 DbusService(app)
             self.apps.append(app)
-            self.screenid = max(self.screenid, int(screenName.split('-')[2])) + 1
+            self.screen_id = max(self.screen_id, int(screen_name.split('-')[2])) + 1
         else:
-            print("Cannot find %s"% screenName)
+            print('Cannot find {}'.format(screen_name))
 
     def get_apps(self):
         return self.apps

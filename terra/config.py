@@ -18,91 +18,63 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 """
 
-from base64 import b64encode, b64decode
-import ConfigParser
-import os
-
-from terra.defaults import ConfigDefaults
 from terra.handlers import TerraHandler
 
+# Define strings and regular expressions for handling section names.
+# TODO: Use nested values, instead of special section names.
+SCREEN_NAME_PREFIX = 'layout-screen-'
+SCREEN_NAME_REGEX = '^layout-screen-(\d+)$'
 
+
+# TODO: Remove config manager once the migration is finished.
 class ConfigManager:
-    config_file_name = 'main.cfg'
+    defaults = TerraHandler.config.defaults
+    """:type: dict"""
 
-    defaults = ConfigDefaults
-    config = ConfigDefaults
-
-    callback_list = []
+    # TODO: Move to MainHandler
     use_fake_transparency = False
+    """:type: bool"""
     disable_losefocus_temporary = False
+    """:type: bool"""
 
-    @classmethod
-    def __init__(cls):
-        # Load the user config, if any.
-        config_path = TerraHandler.get_config_path()
-        if os.path.exists(config_path):
-            config_file_path = os.path.join(config_path, cls.config_file_name)
-            if os.path.exists(config_file_path):
-                cls.config.read(config_file_path)
+    # Holds a reference tot the config handler.
+    handler = None
+    """:type: terra.handlers.ConfigHandler"""
 
-        # TODO: Remove once the code no longer requires the config files!
-        # Now save the config file.
-        cls.save_config()
+    def __init__(self):
+        pass
 
-    @classmethod
-    def get_sections(cls):
-        return cls.config.sections()
+    @staticmethod
+    def get_sections():
+        return TerraHandler.config.keys()
 
     @staticmethod
     def get_conf(section, option):
-        try:
-            value = ConfigManager.config.get(section, option)
-        except ConfigParser.Error:
+        # TODO: Fix!
+        if section.find(SCREEN_NAME_PREFIX) == 0 and section not in TerraHandler.config:
+            TerraHandler.config[section] = TerraHandler.config['layout'].copy()
+            return TerraHandler.config['layout'][option]
+
+        # TODO: Cleanup layout config.
+        if section not in TerraHandler.config:
+            return None
+        if option not in TerraHandler.config[section]:
             return None
 
-        if option == 'select_by_word':
-            return b64decode(value)
-
-        if value == 'True':
-            return True
-        elif value == 'False':
-            return False
-
-        try:
-            return int(value)
-        except ValueError:
-            return value
+        return TerraHandler.config[section][option]
 
     @staticmethod
     def set_conf(section, option, value):
-        if option == 'select_by_word':
-            value = b64encode(value)
-        try:
-            ConfigManager.config.set(section, option, str(value))
-        except ConfigParser.NoSectionError:
-            ConfigManager.config.add_section(section)
-            ConfigManager.config.set(section, option, str(value))
-        except ConfigParser.Error:
-            print("[DEBUG] Config section '%s' has no option named '%s'." % (section, option))
-            return
+        if section not in TerraHandler.config:
+            TerraHandler.config[section] = {}
+
+        TerraHandler.config[section][option] = value
 
     @staticmethod
     def del_conf(section):
-        try:
-            ConfigManager.config.remove_section(section)
-        except ConfigParser.NoSectionError:
-            print("[DEBUG] No section '%s'." % section)
-        except ConfigParser.Error:
-            print("[DEBUG] No section '%s'." % section)
-            return
+        if section in TerraHandler.config:
+            del TerraHandler.config[section]
 
-    @classmethod
-    def save_config(cls):
-        config_path = TerraHandler.get_config_path()
-        if not os.path.exists(config_path):
-            os.mkdir(config_path)
-
-        config_file_path = os.path.join(config_path, cls.config_file_name)
-        with open(config_file_path, 'wb') as configfile:
-            # @TODO: Only save overridden values?!?
-            cls.config.write(configfile)
+    @staticmethod
+    def save_config():
+        TerraHandler.config.save()

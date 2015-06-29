@@ -7,17 +7,26 @@ import os
 from pkg_resources import DistributionNotFound, Requirement, resource_filename, resource_isdir
 
 from terra import (__version__)
+from terra.defaults import ConfigDefaults
+from terra.handlers import ConfigHandler
 
 
 class TerraHandler:
     version = __version__
-    __root_path = ''
-    __config_path = ''
+    """:type: str"""
 
-    # @TODO: Remove and cleanup TerminalWin.update_ui()!? Use the Wins dictionary instead?
-    __ui_event_handlers = []
+    config = None
+    """:type: terra.handlers.ConfigHandler"""
 
     Wins = None
+    """:type: terra.terminal.TerminalWinContainer"""
+
+    __root_path = ''
+    """:type: str"""
+
+    # @TODO: Remove this list and cleanup TerminalWin.update_ui().
+    __ui_event_handlers = []
+    """:type: list"""
 
     @classmethod
     def __init__(cls, root_path=None):
@@ -28,15 +37,11 @@ class TerraHandler:
             cls.__root_path = root_path
 
         # Set the user config path.
-        cls.__config_path = os.path.join(os.environ['HOME'], '.config', 'terra')
+        cls.config = ConfigHandler(config_defaults=ConfigDefaults)
 
     @classmethod
     def get_root_path(cls):
         return cls.__root_path
-
-    @classmethod
-    def get_config_path(cls):
-        return cls.__config_path
 
     @classmethod
     def get_resources_path(cls):
