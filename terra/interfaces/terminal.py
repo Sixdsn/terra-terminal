@@ -515,6 +515,7 @@ class TerminalWin(Gtk.Window):
             int((bg.blue / 65536.0) * 256)
         )
 
+        separator_size = ConfigManager.get_conf('general', 'separator_size')
         css_provider.load_from_data('''
             #notebook GtkPaned {
                 -GtkPaned-handle-size: %i;
@@ -535,7 +536,7 @@ class TerminalWin(Gtk.Window):
                 border-radius: 10px;
                 box-shadow: none;
             }
-            ''' % (ConfigManager.get_conf('general', 'separator_size'), bg_hex))
+            ''' % (int(separator_size), bg_hex))
 
         style_context = Gtk.StyleContext()
         style_context.add_provider_for_screen(self.screen, css_provider, Gtk.STYLE_PROVIDER_PRIORITY_USER)
