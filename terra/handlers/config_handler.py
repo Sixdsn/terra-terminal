@@ -45,14 +45,10 @@ class ConfigHandler(dict):
             if os.path.exists(config_file):
                 print('[DEBUG] Reading config file: {}'.format(config_file))
 
-                fd = open(config_file, 'r')
-
-                # Load the config file.
-                user_config = yaml.load(fd)
-                """:type: dict"""
-
-                fd.close()
-                del fd
+                with open(self.file, 'r') as config_file:
+                    # Load the config file.
+                    user_config = yaml.load(config_file)
+                    """:type: dict"""
 
                 if user_config:
                     self.__parse_user_config(user_config)
@@ -64,7 +60,7 @@ class ConfigHandler(dict):
 
         except IOError:
             sys.exit('[ERROR] Could not read config file: {}'.format(config_file))
-        except ValueError:
+        except yaml.YAMLError:
             sys.exit('[ERROR] Malformed config file: {}'.format(config_file))
 
     def __parse_user_config(self, user_config):
@@ -96,5 +92,3 @@ class ConfigHandler(dict):
 
             # Save the configuration to file.
             yaml.dump(config_data, config_file, default_flow_style=False, indent=2)
-
-            config_file.close()
