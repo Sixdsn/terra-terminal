@@ -46,7 +46,7 @@ class ConfigManager:
 
     @staticmethod
     def get_sections():
-        return TerraHandler.config.keys()
+        return sorted(TerraHandler.config.keys())
 
     @staticmethod
     def get_conf(section, option):

@@ -342,7 +342,7 @@ class TerminalWin(Gtk.Window):
                     if parent_vte:
                         parent_vte.split_axis(parent_vte, axis=axis, split=pos, progname=prog, term_id=term_id, pwd=pwd)
                     else:
-                        print("DEBUG: no parent found for section: %s"% section)
+                        print("DEBUG: no parent(%d) found for section: %s"% (int(ConfigManager.get_conf(section, "parent")), section))
                     self.update_ui()
 
     def get_active_terminal(self):

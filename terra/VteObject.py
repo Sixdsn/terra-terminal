@@ -55,12 +55,14 @@ regex_strings =[SCHEME + "//(?:" + USERPASS + "\\@)?" + HOST + PORT + URLPATH,
 
 
 class VteObjectContainer(Gtk.HBox):
+    counter = 0
     def __init__(self, parent, bare=False, progname=None, pwd=None):
         super(VteObjectContainer, self).__init__()
 
         if bare:
             return
 
+        self.counter = 0
         self.parent = parent
         self.vte_list = []
         self.active_terminal = None
@@ -78,31 +80,28 @@ class VteObjectContainer(Gtk.HBox):
             if button != terminalwin.radio_group_leader and button.get_active():
                 return terminalwin.page_close(None, button)
 
-    def append_terminal(self, term, progname, pwd=None):
+    def append_terminal(self, term, progname, pwd=None, term_id=0):
+        term.id = self.handle_id(term_id)
         term.set_pwd(self.active_terminal, pwd)
         term.fork_process(progname)
         self.active_terminal = term
         self.vte_list.append(self.active_terminal)
 
-    @staticmethod
-    def handle_id(setter=0):
-        if not hasattr(VteObjectContainer.handle_id, "counter"):
-            VteObjectContainer.handle_id.counter = 0
+    def handle_id(self, setter=0):
         if setter != 0:
             ret_id = setter
         else:
-            ret_id = VteObjectContainer.handle_id.counter
-        VteObjectContainer.handle_id.counter = max(VteObjectContainer.handle_id.counter, setter) + 1
+            ret_id = self.counter
+        self.counter = max(self.counter, setter) + 1
         return ret_id
 
 
 class VteObject(Gtk.VBox):
-    def __init__(self, term_id=0):
+    def __init__(self):
         super(Gtk.VBox, self).__init__()
         # Allow UI to be updated by other events.
         TerraHandler.add_ui_event_handler(self.update_ui)
 
-        self.id = VteObjectContainer.handle_id(term_id)
         self.parent = 0
         self.pwd = None
         self.pid = (0, 0)
@@ -462,8 +461,7 @@ class VteObject(Gtk.VBox):
         paned.set_position(split)
 
         parent.remove(self)
-        new_terminal = VteObject(term_id=term_id)
-        new_terminal.parent = self.id
+        new_terminal = VteObject()
         paned.pack1(self, True, False)
         paned.pack2(new_terminal, True, False)
         paned.show_all()
@@ -475,7 +473,8 @@ class VteObject(Gtk.VBox):
         else:
             parent.pack2(paned, True, False)
 
-        self.get_container().append_terminal(new_terminal, progname, pwd)
+        self.get_container().append_terminal(new_terminal, progname, pwd, term_id)
+        new_terminal.parent = self.id
         parent.show_all()
         new_terminal.grab_focus()
 
