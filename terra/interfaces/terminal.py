@@ -702,7 +702,7 @@ class TerminalWin(Gtk.Window):
             win_rect = self.get_allocation()
         if self.get_window() is not None:
             self.get_window().enable_synchronized_configure()
-        if i < step+1:
+        if i < (step + 1):
             self.resize(win_rect.width, win_rect.height - int(((win_rect.height/step) * i)))
             self.queue_resize()
             self.update_events()
