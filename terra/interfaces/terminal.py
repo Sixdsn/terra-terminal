@@ -58,8 +58,6 @@ class TerminalWin(Gtk.Window):
 
         self.resizer = self.builder.get_object('resizer')
         self.resizer.unparent()
-        self.resizer.connect('motion-notify-event', self.on_resize)
-        self.resizer.connect('button-release-event', self.update_resizer)
 
         self.logo = self.builder.get_object('logo')
         logo_path = os.path.join(TerraHandler.get_resources_path(), 'terra.svg')
@@ -132,13 +130,14 @@ class TerminalWin(Gtk.Window):
             self.hide()
 
     def on_window_move(self, window, event):
-        winpos = self.get_position()
-        if not self.is_fullscreen and winpos[0] > 0 and winpos[1] > 0:
-            self.monitor.x = winpos[0]
-            self.monitor.y = winpos[1]
-            self.update_resizer(window, event)
-            ConfigManager.set_conf(self.name, 'posx', winpos[0])
-            ConfigManager.set_conf(self.name, 'posy', winpos[1])
+        if not self.is_fullscreen and event.x > 0 and event.y > 0 and self.get_visible():
+            self.monitor.x = event.x
+            self.monitor.y = event.y
+            self.monitor.height = event.height
+            self.monitor.width = event.width
+            self.resize(self.monitor.width, self.monitor.height)
+            self.show()
+            return True
 
     def exit(self):
         if ConfigManager.get_conf('general', 'prompt_on_quit'):
@@ -164,11 +163,10 @@ class TerminalWin(Gtk.Window):
                     ConfigManager.del_conf(section)
             ConfigManager.del_conf(self.name)
         else:
-            screen_rectangle = self.get_allocation()
-            self.monitor.height = screen_rectangle.height
-            self.monitor.width = screen_rectangle.width
             ConfigManager.set_conf(self.name, 'width', self.monitor.width)
             ConfigManager.set_conf(self.name, 'height', self.monitor.height)
+            ConfigManager.set_conf(self.name, 'posx', self.monitor.x)
+            ConfigManager.set_conf(self.name, 'posy', self.monitor.y)
             ConfigManager.set_conf(self.name, 'fullscreen', self.is_fullscreen)
 
             # We delete all tabs first to avoid unused.
@@ -295,25 +293,6 @@ class TerminalWin(Gtk.Window):
         TerraHandler.remove_ui_event_handler(self.update_ui)
         TerraHandler.Wins.remove_app(self)
         self.destroy()
-
-    def on_resize(self, widget, event):
-        if Gdk.ModifierType.BUTTON1_MASK & event.get_state() != 0:
-            mouse_y = event.device.get_position()[2]
-            new_height = mouse_y - self.get_position()[1]
-            mouse_x = event.device.get_position()[1]
-            new_width = mouse_x - self.get_position()[0]
-            if new_height > 0 and new_width > 0:
-                self.monitor.height = new_height
-                self.monitor.width = new_width
-                self.resize(self.monitor.width, self.monitor.height)
-                self.show()
-
-    def update_resizer(self, widget, event):
-        screen_rectangle = self.get_allocation()
-        self.resizer.set_position(screen_rectangle.height)
-        self.resizer.set_position(screen_rectangle.width)
-        self.resizer.set_property('position', int(screen_rectangle.height))
-        self.resizer.queue_resize()
 
     def add_page(self, page_name=None):
         container = None
