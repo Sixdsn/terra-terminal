@@ -24,7 +24,7 @@ import shutil
 from gi.repository import Gtk, Gdk, GdkPixbuf, GdkX11
 
 from terra.config import ConfigManager
-from terra.handler import TerraHandler
+from terra.handlers import TerraHandler
 from terra.i18n import t
 
 
@@ -223,9 +223,9 @@ class Preferences:
             target_object.set_sensitive(not source_object.get_active())
 
     def restore_defaults_cb(self):
-        for key in ConfigManager.defaults.options('shortcuts'):
+        for key in TerraHandler.config['shortcuts']:
             widget = getattr(self, key)
-            widget.set_text(ConfigManager.defaults.get('shortcuts', key))
+            widget.set_text(TerraHandler.config['shortcuts'][key])
 
     def generate_key_string(self, widget, event):
         key_str = ''
@@ -361,9 +361,9 @@ class Preferences:
         ConfigManager.set_conf('terminal', 'scrollback_lines', str(scrollback_line))
 
         # TAB: Shortcuts
-        for key in ConfigManager.defaults.options('shortcuts'):
+        for key in TerraHandler.config['shortcuts']:
             widget = getattr(self, key)
-            ConfigManager.set_conf('shortcuts', key, widget.get_text())
+            TerraHandler.config['shortcuts'][key] = widget.get_text()
 
         ConfigManager.save_config()
         TerraHandler.execute_ui_event_handlers()

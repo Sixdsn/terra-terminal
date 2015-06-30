@@ -27,7 +27,7 @@ from gi.repository import Gtk, Vte, GLib, Gdk, GdkX11, GObject
 import terra.terra_utils as terra_utils
 from terra.interfaces.preferences import Preferences
 from terra.config import ConfigManager
-from terra.handler import TerraHandler
+from terra.handlers import TerraHandler
 from terra.i18n import t
 from terra.interfaces.prog_dialog import ProgDialog
 from terra.interfaces.win_dialog import WinDialog
@@ -218,7 +218,7 @@ class VteObject(Gtk.VBox):
         if ConfigManager.get_conf('terminal', 'scrollback_unlimited'):
             self.vte.set_scrollback_lines(-1)
         else:
-            self.vte.set_scrollback_lines(ConfigManager.get_conf('terminal', 'scrollback_lines'))
+            self.vte.set_scrollback_lines(int(ConfigManager.get_conf('terminal', 'scrollback_lines')))
 
         self.vte.set_scroll_on_output(ConfigManager.get_conf('terminal', 'scroll_on_output'))
 

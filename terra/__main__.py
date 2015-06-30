@@ -24,9 +24,7 @@ import sys
 # Disabled overlay scrollbars.
 os.putenv('LIBOVERLAY_SCROLLBAR', '0')
 
-from terra.config import ConfigManager
-from terra.handler import TerraHandler
-from terra.terminal import TerminalWinContainer
+from terra.handlers import TerraHandler
 
 # Add the script root the the PYTHONPATH environment variable.
 ROOT = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
@@ -40,15 +38,18 @@ def main(project_root=ROOT):
 
     # Initialize the TerraHandler class variables.
     TerraHandler(project_root)
-    ConfigManager()  # TODO: Initialization should not be required!
 
+    # Load the TerminalWinContainer after TerraHandler has been initialized.
+    # TODO: Cleanup these inter-dependencies.
+    from terra.terminal import TerminalWinContainer
     TerraHandler.Wins = TerminalWinContainer()
 
-    for section in ConfigManager.get_sections():
+    for section in TerraHandler.config.iterkeys():
         if section.find('layout-screen-') != 0:
             continue
 
-        if not ConfigManager.get_conf(section, 'disabled'):
+        # TODO: Cleanup window, tab and tab-child-layout related settings.
+        if not TerraHandler.config[section]['disabled']:
             TerraHandler.Wins.create_app(section)
 
     if len(TerraHandler.Wins.get_apps()) == 0:
