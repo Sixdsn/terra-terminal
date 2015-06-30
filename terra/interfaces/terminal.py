@@ -136,6 +136,7 @@ class TerminalWin(Gtk.Window):
             self.monitor.height = event.height
             self.monitor.width = event.width
             self.resize(self.monitor.width, self.monitor.height)
+            self.set_default_size(self.monitor.width, self.monitor.height)
             self.show()
             return True
 
@@ -327,8 +328,6 @@ class TerminalWin(Gtk.Window):
 
         self.buttonbox.pack_start(new_button, False, True, 0)
 
-        self.update_ui()
-
         if page_name:
             for section in ConfigManager.get_sections():
                 child = str('layout-Child-%s'%(page_name[len('layout-Tabs-'):]))
@@ -343,7 +342,7 @@ class TerminalWin(Gtk.Window):
                         parent_vte.split_axis(parent_vte, axis=axis, split=pos, progname=prog, term_id=term_id, pwd=pwd)
                     else:
                         print("DEBUG: no parent(%d) found for section: %s"% (int(ConfigManager.get_conf(section, "parent")), section))
-                    self.update_ui()
+        self.update_ui()
 
     def get_active_terminal(self):
         return self.notebook.get_nth_page(self.notebook.get_current_page()).active_terminal
@@ -487,7 +486,6 @@ class TerminalWin(Gtk.Window):
                     horizontal_position = screen_rectangle.x + horizontal_position - (width / 2)
             self.unfullscreen()
             self.reshow_with_initial_size()
-            self.resize(self.monitor.width, self.monitor.height)
             self.move(horizontal_position, vertical_position)
 
     def override_gtk_theme(self):
