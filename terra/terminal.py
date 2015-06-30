@@ -18,7 +18,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 """
 
-import sys
+import sys, time
 
 from gi.repository import Gtk
 
@@ -33,11 +33,22 @@ from terra.interfaces.terminal import TerminalWin
 class TerminalWinContainer:
     def __init__(self):
         terra.globalhotkeys.init()
-        self.hotkey = terra.globalhotkeys.GlobalHotkey()
+        tries = 0
+        while True:
+            try:
+                self.hotkey = terra.globalhotkeys.GlobalHotkey()
+            except SystemError as e:
+                tries +=1
+                if (tries >= 2):
+                    raise Exception("Can't get GlobalHotkey instance")
+                time.sleep(1)
+            else:
+                break
 
         global_key_string = ConfigManager.get_conf('shortcuts', 'global_key')
         if global_key_string:
-            self.bind_success = self.hotkey.bind(global_key_string, lambda w: self.show_hide())
+            if not self.hotkey.bind(global_key_string, lambda w: self.show_hide()):
+                raise Exception("Can't bind Global Keys: Another Instance of Terra is probably running")
         self.apps = []
         self.old_apps = []
         self.screen_id = 0
@@ -83,9 +94,6 @@ class TerminalWinContainer:
             self.app_quit()
 
     def create_app(self, screen_name='layout'):
-        if not self.bind_success:
-            raise Exception("Can't bind Global Keys: Another Instance of Terra is probably running")
-
         monitor = terra_utils.get_screen(screen_name)
 
         if screen_name == 'layout':
