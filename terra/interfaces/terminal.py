@@ -293,7 +293,6 @@ class TerminalWin(Gtk.Window):
 
     def quit(self):
         TerraHandler.remove_ui_event_handler(self.update_ui)
-        ConfigManager.save_config()
         TerraHandler.Wins.remove_app(self)
         self.destroy()
 
