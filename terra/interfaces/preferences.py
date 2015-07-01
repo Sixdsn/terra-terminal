@@ -25,7 +25,7 @@ from gi.repository import Gtk, Gdk, GdkPixbuf, GdkX11
 
 from terra.config import ConfigManager
 from terra.handlers import TerraHandler
-from terra.i18n import t
+from terra.handlers import t
 
 
 class Preferences:

@@ -24,7 +24,7 @@ from operator import attrgetter
 
 from gi.repository import Gtk, Gdk
 
-from terra.i18n import t
+from terra.handlers import t
 from terra.config import ConfigManager
 
 def get_paned_parent(vte_list, ParId):

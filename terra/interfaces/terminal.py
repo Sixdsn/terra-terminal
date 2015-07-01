@@ -7,7 +7,7 @@ from gi.repository import Gtk, Gdk, GdkPixbuf, GObject, GdkX11
 import terra.terra_utils as terra_utils
 from terra.config import ConfigManager
 from terra.handlers import TerraHandler
-from terra.i18n import t
+from terra.handlers import t
 from terra.interfaces.rename_dialog import RenameDialog
 from terra.VteObject import VteObjectContainer, VteObject
 
