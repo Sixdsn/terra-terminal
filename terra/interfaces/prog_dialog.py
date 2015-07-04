@@ -29,7 +29,7 @@ from terra.handlers import TerraHandler
 
 class ProgDialog:
     def __init__(self, sender, active_terminal):
-        terminal_ui_file = os.path.join(TerraHandler.get_resources_path(), 'ui/terminal.ui')
+        terminal_ui_file = os.path.join(TerraHandler.get_resources_path(), 'terminal.ui')
         if not os.path.exists(terminal_ui_file):
             msg = 'ERROR: UI data file is missing: {}'.format(terminal_ui_file)
             sys.exit(msg)

@@ -29,7 +29,7 @@ from terra.handlers import TerraHandler
 
 class WinDialog:
     def __init__(self, sender, active_terminal):
-        win_pref_ui_file = os.path.join(TerraHandler.get_resources_path(), 'ui/win_pref.ui')
+        win_pref_ui_file = os.path.join(TerraHandler.get_resources_path(), 'win_pref.ui')
         if not os.path.exists(win_pref_ui_file):
             msg = 'ERROR: UI data file is missing: {}'.format(win_pref_ui_file)
             sys.exit(msg)

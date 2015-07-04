@@ -34,7 +34,7 @@ class Preferences:
         self.init_ui()
 
     def init_ui(self):
-        preferences_ui_file = os.path.join(TerraHandler.get_resources_path(), 'ui/preferences.ui')
+        preferences_ui_file = os.path.join(TerraHandler.get_resources_path(), 'preferences.ui')
         if not os.path.exists(preferences_ui_file):
             msg = 'ERROR: UI data file is missing: {}'.format(preferences_ui_file)
             sys.exit(msg)

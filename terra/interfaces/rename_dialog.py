@@ -29,7 +29,7 @@ from terra.handlers import TerraHandler
 
 class RenameDialog:
     def __init__(self, sender, active_terminal):
-        rename_ui_file = os.path.join(TerraHandler.get_resources_path(), 'ui/rename.ui')
+        rename_ui_file = os.path.join(TerraHandler.get_resources_path(), 'rename.ui')
         if not os.path.exists(rename_ui_file):
             msg = 'ERROR: UI data file is missing: {}'.format(rename_ui_file)
             sys.exit(msg)
