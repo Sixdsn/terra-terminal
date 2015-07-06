@@ -16,8 +16,8 @@ class TerminalWin(Gtk.Window):
     def __init__(self, name, monitor):
         main_ui_file = os.path.join(TerraHandler.get_resources_path(), 'main.ui')
         if not os.path.exists(main_ui_file):
-            msg = 'ERROR: UI data file is missing: {}'.format(main_ui_file)
-            sys.exit(msg)
+            msg = t('UI data file is missing: {}')
+            sys.exit(msg.format(main_ui_file))
 
         super(TerminalWin, self).__init__()
 
