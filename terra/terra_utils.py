@@ -24,7 +24,7 @@ from operator import attrgetter
 
 from gi.repository import Gtk, Gdk
 
-from terra.i18n import t
+from terra.handlers import t
 from terra.config import ConfigManager
 
 def get_paned_parent(vte_list, ParId):
@@ -82,8 +82,14 @@ def get_screen(name):
 def cannot_bind(app):
     ConfigManager.set_conf('general', 'hide_on_start', False)
     ConfigManager.set_conf('general', 'hide_on_losefocus', False)
-    msgtext = t("Another application using '%s'. Please open preferences and change the shortcut key.") % ConfigManager.get_conf('shortcuts', 'global_key')
-    msgbox = Gtk.MessageDialog(app, Gtk.DialogFlags.DESTROY_WITH_PARENT, Gtk.MessageType.WARNING, Gtk.ButtonsType.OK, msgtext)
+    msgtext = t("Another application is using '{}'. Please change the shortcut key in the application Preferences.")
+    msgbox = Gtk.MessageDialog(
+        app,
+        Gtk.DialogFlags.DESTROY_WITH_PARENT,
+        Gtk.MessageType.WARNING,
+        Gtk.ButtonsType.OK,
+        msgtext.format(ConfigManager.get_conf('shortcuts', 'global_key'))
+    )
     msgbox.run()
     msgbox.destroy()
 

@@ -28,7 +28,7 @@ import terra.terra_utils as terra_utils
 from terra.interfaces.preferences import Preferences
 from terra.config import ConfigManager
 from terra.handlers import TerraHandler
-from terra.i18n import t
+from terra.handlers import t
 from terra.interfaces.prog_dialog import ProgDialog
 from terra.interfaces.win_dialog import WinDialog
 

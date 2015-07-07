@@ -25,7 +25,7 @@ from gi.repository import Gtk, Gdk, GdkPixbuf, GdkX11
 
 from terra.config import ConfigManager
 from terra.handlers import TerraHandler
-from terra.i18n import t
+from terra.handlers import t
 
 
 class Preferences:
@@ -36,8 +36,8 @@ class Preferences:
     def init_ui(self):
         preferences_ui_file = os.path.join(TerraHandler.get_resources_path(), 'preferences.ui')
         if not os.path.exists(preferences_ui_file):
-            msg = 'ERROR: UI data file is missing: {}'.format(preferences_ui_file)
-            sys.exit(msg)
+            msg = t('UI data file is missing: {}')
+            sys.exit(msg.format(preferences_ui_file))
 
         self.is_running = True
         builder = Gtk.Builder()

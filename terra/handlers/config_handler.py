@@ -6,6 +6,8 @@ import yaml
 import os
 import sys
 
+from terra.handlers import t
+
 
 class ConfigHandler(dict):
     defaults = {}
@@ -59,9 +61,11 @@ class ConfigHandler(dict):
                 print('[DEBUG] No config file: {}'.format(self.file))
 
         except IOError:
-            sys.exit('[ERROR] Could not read config file: {}'.format(self.file))
+            msg = t('Could not read config file: {}')
+            sys.exit(msg.format(self.file))
         except yaml.YAMLError:
-            sys.exit('[ERROR] Malformed config file: {}'.format(self.file))
+            msg = t('Malformed config file: {}')
+            sys.exit(msg.format(self.file))
 
     def __parse_config_data(self, config_data):
         """
@@ -101,4 +105,5 @@ class ConfigHandler(dict):
                 # Save the configuration to file.
                 yaml.dump(config_data, config_file, default_flow_style=False, indent=2)
         except IOError:
-            print('Could not save the config file: {}'.format(self.file))
+            msg = t('Could not save the config file: {}')
+            sys.exit(msg.format(self.file))

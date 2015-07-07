@@ -25,14 +25,15 @@ from gi.repository import Gtk, Gdk
 
 from terra.config import ConfigManager
 from terra.handlers import TerraHandler
+from terra.handlers import t
 
 
 class WinDialog:
     def __init__(self, sender, active_terminal):
         win_pref_ui_file = os.path.join(TerraHandler.get_resources_path(), 'win_pref.ui')
         if not os.path.exists(win_pref_ui_file):
-            msg = 'ERROR: UI data file is missing: {}'.format(win_pref_ui_file)
-            sys.exit(msg)
+            msg = t('UI data file is missing: {}')
+            sys.exit(msg.format(win_pref_ui_file))
 
         ConfigManager.disable_losefocus_temporary = True
         self.sender = sender

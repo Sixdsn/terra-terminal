@@ -28,6 +28,7 @@ import terra.terra_utils as terra_utils
 from terra.config import ConfigManager
 from terra.dbusservice import DbusService
 from terra.interfaces.terminal import TerminalWin
+from terra.handlers import t
 
 
 class TerminalWinContainer:
@@ -37,10 +38,10 @@ class TerminalWinContainer:
         while True:
             try:
                 self.hotkey = terra.globalhotkeys.GlobalHotkey()
-            except SystemError as e:
-                tries +=1
-                if (tries >= 2):
-                    raise Exception("Can't get GlobalHotkey instance")
+            except SystemError:
+                tries += 1
+                if tries >= 2:
+                    sys.exit(t("Can't get GlobalHotkeys instance."))
                 time.sleep(1)
             else:
                 break
@@ -48,7 +49,8 @@ class TerminalWinContainer:
         global_key_string = ConfigManager.get_conf('shortcuts', 'global_key')
         if global_key_string:
             if not self.hotkey.bind(global_key_string, lambda w: self.show_hide()):
-                raise Exception("Can't bind Global Keys: Another Instance of Terra is probably running")
+                sys.exit(t("Can't bind global hotkey: Another Instance of Terra is probably running."))
+
         self.apps = []
         self.old_apps = []
         self.screen_id = 0
