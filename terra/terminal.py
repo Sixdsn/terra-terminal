@@ -18,17 +18,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 """
 
-import sys, time
+import sys
+import time
 
 from gi.repository import Gtk
 
 import terra.globalhotkeys
 
 import terra.terra_utils as terra_utils
-from terra.config import ConfigManager
 from terra.dbusservice import DbusService
 from terra.interfaces.terminal import TerminalWin
 from terra.handlers import t
+from terra.handlers import TerraHandler
 
 
 class TerminalWinContainer:
@@ -46,7 +47,7 @@ class TerminalWinContainer:
             else:
                 break
 
-        global_key_string = ConfigManager.get_conf('shortcuts', 'global_key')
+        global_key_string = TerraHandler.config['shortcuts']['global_key']
         if global_key_string:
             if not self.hotkey.bind(global_key_string, lambda w: self.show_hide()):
                 sys.exit(t("Can't bind global hotkey: Another Instance of Terra is probably running."))
