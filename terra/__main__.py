@@ -24,6 +24,7 @@ import sys
 # Disabled overlay scrollbars.
 os.putenv('LIBOVERLAY_SCROLLBAR', '0')
 
+from terra.handlers import t
 from terra.handlers import TerraHandler
 
 # Add the script root the the PYTHONPATH environment variable.
@@ -34,7 +35,7 @@ if ROOT not in sys.path:
 
 def main(project_root=ROOT):
     if len(sys.argv) > 1:
-        sys.exit("Terra Doesn't support any argument")
+        sys.exit(t("Terra doesn't support arguments."))
 
     # Initialize the TerraHandler class variables.
     TerraHandler(project_root)
