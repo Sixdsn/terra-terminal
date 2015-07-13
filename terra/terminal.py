@@ -91,11 +91,11 @@ class TerminalWinContainer:
             Gtk.main_quit()
 
     def remove_app(self, ext):
+        if len(self.apps) == 1:
+            self.app_quit()
         if ext in self.apps:
             self.apps.remove(ext)
         self.old_apps.append(ext)
-        if len(self.apps) == 0:
-            self.app_quit()
 
     def create_app(self, screen_name='layout'):
         monitor = terra_utils.get_screen(screen_name)
