@@ -27,8 +27,16 @@ from terra.config import ConfigManager
 from terra.handlers import TerraHandler
 from terra.handlers import t
 
-
 class Preferences:
+    # TAB: General
+    _boolean_general_options = [
+        # 'run_on_startup',
+        'remember_session',
+        'prompt_on_quit',
+        'spawn_term_on_last_close',
+        'hide_from_taskbar',
+        'hide_on_start',
+    ]
     def __init__(self):
         # TODO: Only initialize the UI once. Find a way to hide the window.
         self.init_ui()
@@ -57,16 +65,7 @@ class Preferences:
         self.btn_ok = builder.get_object('btn_ok')
         self.btn_ok.connect('clicked', self.on_ok_clicked)
 
-        # TAB: General
-        boolean_options = [
-            # 'run_on_startup',
-            'prompt_on_quit',
-            'spawn_term_on_last_close',
-            'hide_from_taskbar',
-            'hide_on_start',
-        ]
-
-        for option in boolean_options:
+        for option in Preferences._boolean_general_options:
             setattr(self, option, builder.get_object(option))
             getattr(self, option).set_active(ConfigManager.get_conf('general', option))
 
@@ -99,13 +98,13 @@ class Preferences:
             self.dir_custom.set_sensitive(True)
 
         # TAB: Window
-        boolean_options = [
+        boolean_window_options = [
             'use_border',
             'always_on_top',
             'hide_on_losefocus',
             'use_animation',
         ]
-        for option in boolean_options:
+        for option in boolean_window_options:
             setattr(self, option, builder.get_object(option))
             getattr(self, option).set_active(ConfigManager.get_conf('window', option))
 
@@ -116,15 +115,14 @@ class Preferences:
         self.animation_step_time.set_text(str(ConfigManager.get_conf('window', 'animation_step_time')))
 
         # TAB: Terminal
-        boolean_options = [
+        boolean_terminal_options = [
             'use_system_font',
             'show_scrollbar',
             'scrollback_unlimited',
             'scroll_on_output',
             'scroll_on_keystroke',
         ]
-
-        for option in boolean_options:
+        for option in boolean_terminal_options:
             setattr(self, option, builder.get_object(option))
             getattr(self, option).set_active(ConfigManager.get_conf('terminal', option))
 
@@ -252,18 +250,7 @@ class Preferences:
         self.window.show_all()
 
     def on_apply_clicked(self, widget):
-        # TODO: Clean!
-
-        # TAB: General
-        boolean_options = [
-            # 'run_on_startup',
-            'prompt_on_quit',
-            'spawn_term_on_last_close',
-            'hide_from_taskbar',
-            'hide_on_start',
-        ]
-
-        for option in boolean_options:
+        for option in Preferences._boolean_general_options:
             ConfigManager.set_conf('general', option, getattr(self, option).get_active())
 
         desktop_file_source = os.path.join(TerraHandler.get_resources_path(), 'terra.desktop')

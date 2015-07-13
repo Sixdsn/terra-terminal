@@ -33,7 +33,7 @@ class TerminalWin(Gtk.Window):
         TerraHandler.add_ui_event_handler(self.update_ui)
 
         self.screen = self.get_screen()
-        self.screen.connect('monitors-changed', self.check_visible)
+        self.screen.connect('monitors-changed', lambda w: self.check_visible())
         self.monitor = monitor
 
         self.init_transparency()
