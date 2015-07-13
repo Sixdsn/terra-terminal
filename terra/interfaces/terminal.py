@@ -130,7 +130,9 @@ class TerminalWin(Gtk.Window):
             self.hide()
 
     def on_window_move(self, window, event):
-        if not self.is_fullscreen and event.x > 0 and event.y > 0 and self.get_visible():
+        if not self.is_fullscreen and event.x > 0 and event.y > 0 and self.get_visible() and \
+           ((event.x != self.monitor.x and event.y != self.monitor.y) \
+            or (event.width != self.monitor.width and event.height != self.monitor.height)):
             self.monitor.x = event.x
             self.monitor.y = event.y
             self.monitor.height = event.height
@@ -138,7 +140,6 @@ class TerminalWin(Gtk.Window):
             self.resize(self.monitor.width, self.monitor.height)
             self.set_default_size(self.monitor.width, self.monitor.height)
             self.show()
-            return True
 
     def exit(self):
         if ConfigManager.get_conf('general', 'prompt_on_quit'):
