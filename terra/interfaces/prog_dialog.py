@@ -73,10 +73,11 @@ class ProgDialog:
         del self
 
     def rename(self):
-        self.sender.progname = self.dialog.entry_new_progname.get_text()
+        save = self.sender.progname
         try:
+            self.sender.progname = self.dialog.entry_new_progname.get_text()
             self.sender.fork_process(self.sender.progname)
         except:
-            pass
+            self.sender.progname = save
         ConfigManager.disable_losefocus_temporary = False
         self.close()
