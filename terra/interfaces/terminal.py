@@ -97,10 +97,10 @@ class TerminalWin(Gtk.Window):
         for section in ConfigManager.get_sections():
             tabs = str('layout-Tabs-%d'% self.screen_id)
             if section.find(tabs) == 0 and not ConfigManager.get_conf(section, 'disabled'):
-                self.add_page(page_name=str(section))
+                self.add_page(page_name=str(section), update=False)
                 added = True
         if not added:
-            self.add_page()
+            self.add_page(update=False)
 
         for button in self.buttonbox:
             if button == self.radio_group_leader:
@@ -294,7 +294,7 @@ class TerminalWin(Gtk.Window):
         TerraHandler.Wins.remove_app(self)
         self.destroy()
 
-    def add_page(self, page_name=None):
+    def add_page(self, page_name=None, update=True):
         container = None
         if page_name:
             section = str('layout-Child-%s-0' % (page_name[len('layout-Tabs-'):]))
@@ -341,7 +341,8 @@ class TerminalWin(Gtk.Window):
                         parent_vte.split_axis(parent_vte, axis=axis, split=pos, progname=prog, term_id=term_id, pwd=pwd)
                     else:
                         print("DEBUG: no parent(%d) found for section: %s"% (int(ConfigManager.get_conf(section, "parent")), section))
-        self.update_ui()
+        if update:
+            self.update_ui()
 
     def get_active_terminal(self):
         return self.notebook.get_nth_page(self.notebook.get_current_page()).active_terminal
