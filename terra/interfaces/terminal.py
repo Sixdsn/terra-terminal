@@ -164,12 +164,6 @@ class TerminalWin(Gtk.Window):
                     ConfigManager.del_conf(section)
             ConfigManager.del_conf(self.name)
         else:
-            ConfigManager.set_conf(self.name, 'width', self.monitor.width)
-            ConfigManager.set_conf(self.name, 'height', self.monitor.height)
-            ConfigManager.set_conf(self.name, 'posx', self.monitor.x)
-            ConfigManager.set_conf(self.name, 'posy', self.monitor.y)
-            ConfigManager.set_conf(self.name, 'fullscreen', self.is_fullscreen)
-
             # We delete all tabs first to avoid unused.
             # We delete all layouts first to avoid unused.
             # NOTE: Don't change the list while iterating over it.
@@ -181,6 +175,12 @@ class TerminalWin(Gtk.Window):
                         ConfigManager.del_conf(section)
                 if section.find('layout-Child-%d' % self.screen_id) == 0:
                     ConfigManager.del_conf(section)
+
+            ConfigManager.set_conf(self.name, 'width', self.monitor.width)
+            ConfigManager.set_conf(self.name, 'height', self.monitor.height)
+            ConfigManager.set_conf(self.name, 'posx', self.monitor.x)
+            ConfigManager.set_conf(self.name, 'posy', self.monitor.y)
+            ConfigManager.set_conf(self.name, 'fullscreen', self.is_fullscreen)
 
             # We add them all.
             tab_id = 0
@@ -205,8 +205,6 @@ class TerminalWin(Gtk.Window):
                     ConfigManager.set_conf(section, 'pwd', child.pwd)
                     child_id += 1
                 tab_id += 1
-
-        ConfigManager.save_config()
 
     def use_child(self, child, parent, axis, pos):
         child.pos = -1
@@ -528,7 +526,6 @@ class TerminalWin(Gtk.Window):
         if self.key_event_compare('toggle_scrollbars_key', event):
             # Toggle value
             ConfigManager.set_conf('terminal', 'show_scrollbar', not ConfigManager.get_conf('terminal', 'show_scrollbar'))
-            ConfigManager.save_config()
             TerraHandler.execute_ui_event_handlers()
             return True
 

@@ -80,10 +80,11 @@ class TerminalWinContainer:
             app.save_conf()
         for app in self.old_apps:
             app.save_conf(False)
+        TerraHandler.config.save()
 
     def app_quit(self):
-        for app in self.apps:
-            app.quit()
+        if TerraHandler.config['general']['remember_session']:
+            self.save_conf()
         sys.stdout.flush()
         sys.stderr.flush()
         if self.is_running:

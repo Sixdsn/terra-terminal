@@ -24,6 +24,7 @@ ConfigDefaults = {
     'general': {
         # General
         # 'run_on_startup': False,
+        'remember_session': False,
         'prompt_on_quit': True,
         'spawn_term_on_last_close': False,
 
