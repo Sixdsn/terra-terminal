@@ -23,7 +23,7 @@ import shutil
 
 from gi.repository import Gtk, Gdk, GdkPixbuf, GdkX11
 
-from terra.config import ConfigManager
+from terra.ConfigManager import ConfigManager
 from terra.handlers import TerraHandler
 from terra.handlers import t
 

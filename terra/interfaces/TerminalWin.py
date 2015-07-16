@@ -5,10 +5,10 @@ import sys
 from gi.repository import Gtk, Gdk, GdkPixbuf, GObject, GdkX11
 
 import terra.terra_utils as terra_utils
-from terra.config import ConfigManager
+from terra.ConfigManager import ConfigManager
 from terra.handlers import TerraHandler
 from terra.handlers import t
-from terra.interfaces.rename_dialog import RenameDialog
+from terra.interfaces.RenameDialog import RenameDialog
 from terra.VteObject import VteObjectContainer, VteObject
 
 

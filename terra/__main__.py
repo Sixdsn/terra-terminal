@@ -42,7 +42,7 @@ def main(project_root=ROOT):
 
     # Load the TerminalWinContainer after TerraHandler has been initialized.
     # TODO: Cleanup these inter-dependencies.
-    from terra.terminal import TerminalWinContainer
+    from terra.TerminalWinContainer import TerminalWinContainer
     TerraHandler.Wins = TerminalWinContainer()
 
     for section in TerraHandler.config.iterkeys():

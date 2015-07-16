@@ -25,7 +25,7 @@ from operator import attrgetter
 from gi.repository import Gtk, Gdk
 
 from terra.handlers import t
-from terra.config import ConfigManager
+from terra.ConfigManager import ConfigManager
 
 def get_paned_parent(vte_list, ParId):
     parent = [item for item in vte_list if item.id == ParId]

@@ -7,7 +7,7 @@ import os
 from pkg_resources import DistributionNotFound, Requirement, resource_filename, resource_isdir
 
 from terra import (__version__)
-from terra.defaults import ConfigDefaults
+from terra.ConfigDefaults import ConfigDefaults
 from terra.handlers import ConfigHandler
 
 
@@ -19,7 +19,7 @@ class TerraHandler:
     """:type: terra.handlers.ConfigHandler"""
 
     Wins = None
-    """:type: terra.terminal.TerminalWinContainer"""
+    """:type: terra.TerminalWinContainer.TerminalWinContainer"""
 
     __root_path = ''
     """:type: str"""

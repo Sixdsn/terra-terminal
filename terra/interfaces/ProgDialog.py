@@ -23,7 +23,7 @@ import sys
 
 from gi.repository import Gtk, Gdk
 
-from terra.config import ConfigManager
+from terra.ConfigManager import ConfigManager
 from terra.handlers import TerraHandler
 from terra.handlers import t
 

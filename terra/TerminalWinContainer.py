@@ -26,8 +26,8 @@ from gi.repository import Gtk
 import terra.globalhotkeys
 
 import terra.terra_utils as terra_utils
-from terra.dbusservice import DbusService
-from terra.interfaces.terminal import TerminalWin
+from terra.DbusService import DbusService
+from terra.interfaces.TerminalWin import TerminalWin
 from terra.handlers import t
 from terra.handlers import TerraHandler
 
