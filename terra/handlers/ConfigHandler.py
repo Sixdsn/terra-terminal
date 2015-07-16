@@ -76,7 +76,7 @@ class ConfigHandler(dict):
         for section_name in config_data:
             for option, value in config_data[section_name].iteritems():
                 # Allow the deletion of default values.
-                if value is None:
+                if value is None and section_name in self:
                     del self[section_name][option]
                     continue
 
