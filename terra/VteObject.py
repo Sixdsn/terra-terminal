@@ -31,7 +31,7 @@ from terra.handlers import TerraHandler
 from terra.handlers import t
 from terra.interfaces.ProgDialog import ProgDialog
 from terra.interfaces.WinDialog import WinDialog
-
+from terra.VteObjectContainer import VteObjectContainer
 
 # this regex strings taken from pantheon-terminal
 # thanks munchor and voldyman
@@ -52,50 +52,6 @@ regex_strings =[SCHEME + "//(?:" + USERPASS + "\\@)?" + HOST + PORT + URLPATH,
     "(?:callto:|h323:|sip:)" + USERCHARS_CLASS + "[" + USERCHARS + ".]*(?:" + PORT + "/[a-z0-9]+)?\\@" + HOST,
     "(?:mailto:)?" + USERCHARS_CLASS + "[" + USERCHARS+ ".]*\\@" + HOSTCHARS_CLASS + "+\\." + HOST,
     "(?:news:|man:|info:)[[:alnum:]\\Q^_{|}~!\"#$%&'()*+,./;:=?`\\E]+"]
-
-
-class VteObjectContainer(Gtk.HBox):
-    counter = 0
-
-    def __init__(self, parent, bare=False, progname=None, pwd=None):
-        super(VteObjectContainer, self).__init__()
-
-        if bare:
-            return
-
-        self.counter = 0
-        self.parent = parent
-        self.vte_list = []
-        self.active_terminal = None
-
-        if not progname:
-            progname = ConfigManager.get_conf('general', 'start_shell_program')
-        self.append_terminal(VteObject(), progname, pwd=pwd)
-
-        self.pack_start(self.active_terminal, True, True, 0)
-        self.show_all()
-
-    def close_page(self):
-        terminalwin = self.get_toplevel()
-        for button in terminalwin.buttonbox:
-            if button != terminalwin.radio_group_leader and button.get_active():
-                return terminalwin.page_close(None, button)
-
-    def append_terminal(self, term, progname, pwd=None, term_id=0):
-        term.id = self.handle_id(term_id)
-        term.set_pwd(self.active_terminal, pwd)
-        term.fork_process(progname)
-        self.active_terminal = term
-        self.vte_list.append(self.active_terminal)
-
-    def handle_id(self, setter=0):
-        if setter != 0:
-            ret_id = setter
-        else:
-            ret_id = self.counter
-        self.counter = max(self.counter, setter) + 1
-        return ret_id
-
 
 class VteObject(Gtk.VBox):
     def __init__(self):

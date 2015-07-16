@@ -9,7 +9,8 @@ from terra.ConfigManager import ConfigManager
 from terra.handlers import TerraHandler
 from terra.handlers import t
 from terra.interfaces.RenameDialog import RenameDialog
-from terra.VteObject import VteObjectContainer, VteObject
+from terra.VteObjectContainer import VteObjectContainer
+from terra.VteObject import VteObject
 
 
 class TerminalWin(Gtk.Window):
