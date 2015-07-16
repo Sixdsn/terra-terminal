@@ -91,6 +91,8 @@ class TerminalWinContainer:
             Gtk.main_quit()
 
     def remove_app(self, ext):
+        if ext not in self.apps:
+            return
         if len(self.apps) == 1:
             self.app_quit()
         if ext in self.apps:
