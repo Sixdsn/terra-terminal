@@ -8,7 +8,7 @@ import terra.terra_utils as terra_utils
 from terra.ConfigManager import ConfigManager
 from terra.handlers import TerraHandler
 from terra.handlers import t
-from terra.interfaces.RenameDialog import RenameDialog
+from terra.interfaces.InputDialog import InputDialog
 from terra.VteObjectContainer import VteObjectContainer
 from terra.VteObject import VteObject
 
@@ -388,7 +388,23 @@ class TerminalWin(Gtk.Window):
         self.get_active_terminal().grab_focus()
 
     def page_rename(self, menu, sender):
-        RenameDialog(sender, self.get_active_terminal())
+        current_tab_name = sender.get_label()
+
+        dialog = InputDialog(
+            parent=self.get_toplevel(),
+            title=t('Rename Tab'),
+            label=t('New tab name:'),
+            entry_text=current_tab_name,
+        )
+        response = dialog.run()
+
+        if response == Gtk.ResponseType.APPLY:
+            new_tab_name = dialog.get_entry_text()
+
+            if new_tab_name:
+                sender.set_label(new_tab_name)
+
+        dialog.destroy()
 
     def page_close(self, menu, sender):
         button_count = len(self.buttonbox.get_children())
