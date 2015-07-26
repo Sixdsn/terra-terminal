@@ -29,7 +29,7 @@ from terra.interfaces.Preferences import Preferences
 from terra.ConfigManager import ConfigManager
 from terra.handlers import TerraHandler
 from terra.handlers import t
-from terra.interfaces.ProgDialog import ProgDialog
+from terra.interfaces.InputDialog import InputDialog
 from terra.interfaces.WinDialog import WinDialog
 from terra.VteObjectContainer import VteObjectContainer
 
@@ -280,7 +280,7 @@ class VteObject(Gtk.VBox):
             self.submenu_item_connect_hack(self.menu_new, self.new_app, self.menu_new)
 
             self.set_new_prog = Gtk.MenuItem(t('Set ProgName'))
-            self.submenu_item_connect_hack(self.set_new_prog, self.save_progname, self.set_new_prog)
+            self.submenu_item_connect_hack(self.set_new_prog, self.change_shell_command_dialog, self.set_new_prog)
 
             self.reset_prog = Gtk.MenuItem(t('Reset Default Progname'))
             self.submenu_item_connect_hack(self.reset_prog, self.reset_progname, self.reset_prog)
@@ -319,9 +319,27 @@ class VteObject(Gtk.VBox):
         elif value:
             Gtk.show_uri(self.get_screen(), value, GdkX11.x11_get_server_time(self.get_window()))
 
-    def save_progname(self, widget):
-        ConfigManager.disable_losefocus_temporary = True
-        ProgDialog(self, self)
+    def change_shell_command_dialog(self, widget):
+        default_shell_command = ''
+        if hasattr(self, 'progname') and self.progname:
+            default_shell_command = self.progname
+
+        dialog = InputDialog(
+            parent=self.get_toplevel(),
+            title=t('Change Shell Command'),
+            label=t('Shell Command:'),
+            entry_text=default_shell_command,
+        )
+        response = dialog.run()
+
+        if response == Gtk.ResponseType.APPLY:
+            new_shell_command = dialog.get_entry_text()
+
+            # TODO: Prevent errors, clean the VTE screen.
+            if os.path.exists(new_shell_command):
+                self.fork_process(new_shell_command)
+
+        dialog.destroy()
 
     def win_prefs(self, widget):
         ConfigManager.disable_losefocus_temporary = True
