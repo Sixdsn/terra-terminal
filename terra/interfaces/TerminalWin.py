@@ -57,8 +57,9 @@ class TerminalWin(Gtk.Window):
         self.losefocus_time = 0
         self.set_has_resize_grip(False)
 
-        self.resizer = self.builder.get_object('resizer')
-        self.resizer.unparent()
+        self.main_container = self.builder.get_object('main_container')
+        """:type: Gtk.Box"""
+        self.main_container.reparent(self)
 
         self.logo = self.builder.get_object('logo')
         logo_path = os.path.join(TerraHandler.get_resources_path(), 'terra.svg')
@@ -90,7 +91,6 @@ class TerminalWin(Gtk.Window):
         self.connect('key-press-event', self.on_keypress)
         self.connect('focus-out-event', self.on_window_losefocus)
         self.connect('configure-event', self.on_window_move)
-        self.add(self.resizer)
 
         self.set_default_size(self.monitor.width, self.monitor.height)
 
@@ -441,20 +441,11 @@ class TerminalWin(Gtk.Window):
             self.move(win_rect.x, win_rect.y)
             self.fullscreen()
 
-            # hide resizer
-            if self.resizer.get_child2() is not None:
-                self.resizer.remove(self.resizer.get_child2())
-
             # hide tab bar
             if ConfigManager.get_conf(self.name, 'hide-tab-bar-fullscreen'):
                 self.tabbar.set_no_show_all(True)
                 self.tabbar.hide()
         else:
-            # show resizer
-            if self.resizer.get_child2() is None:
-                self.resizer.add2(Gtk.Box())
-                self.resizer.get_child2().show_all()
-
             vertical_position = self.monitor.y
             horizontal_position = self.monitor.x
             screen_rectangle = self.get_screen_rectangle()
@@ -726,8 +717,6 @@ class TerminalWin(Gtk.Window):
         if i < (step + 1):
             self.resize(win_rect.width, int(((win_rect.height/step) * i)))
             self.queue_resize()
-            self.resizer.set_property('position', int(((win_rect.height/step) * i)))
-            self.resizer.queue_resize()
             self.update_events()
             GObject.timeout_add(ConfigManager.get_conf('window', 'animation_step_time'), self.slide_down, i+1)
         if self.get_window() is not None:
