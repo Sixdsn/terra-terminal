@@ -29,7 +29,7 @@ from terra.interfaces.Preferences import Preferences
 from terra.ConfigManager import ConfigManager
 from terra.handlers import TerraHandler
 from terra.handlers import t
-from terra.interfaces.ProgDialog import ProgDialog
+from terra.interfaces.InputDialog import InputDialog
 from terra.interfaces.WinDialog import WinDialog
 from terra.VteObjectContainer import VteObjectContainer
 
@@ -271,32 +271,32 @@ class VteObject(Gtk.VBox):
             self.menu_h_split.connect('activate', self.split_axis, 'v')
             self.menu.append(self.menu_h_split)
 
-            self.term_menu = Gtk.Menu()
-
+            # Create a Terminals sub-menu.
             self.term = Gtk.MenuItem(t('Terminals'))
+            self.menu.append(self.term)
+
+            self.term_menu = Gtk.Menu()
             self.term.set_submenu(self.term_menu)
 
-            self.menu_new = Gtk.MenuItem(t('New Terminal'))
+            self.menu_new = Gtk.MenuItem(t('New Window'))
             self.submenu_item_connect_hack(self.menu_new, self.new_app, self.menu_new)
-
-            self.set_new_prog = Gtk.MenuItem(t('Set ProgName'))
-            self.submenu_item_connect_hack(self.set_new_prog, self.save_progname, self.set_new_prog)
-
-            self.reset_prog = Gtk.MenuItem(t('Reset Default Progname'))
-            self.submenu_item_connect_hack(self.reset_prog, self.reset_progname, self.reset_prog)
-
             self.term_menu.append(self.menu_new)
-            self.term_menu.append(self.set_new_prog)
-            self.term_menu.append(self.reset_prog)
-            self.menu.append(self.term)
+
+            self.change_shell_item = Gtk.MenuItem(t('Change Shell Command'))
+            self.submenu_item_connect_hack(self.change_shell_item, self.change_shell_command_dialog, self.change_shell_item)
+            self.term_menu.append(self.change_shell_item)
+
+            self.reset_shell_item = Gtk.MenuItem(t('Use Default Shell Command'))
+            self.submenu_item_connect_hack(self.reset_shell_item, self.reset_progname, self.reset_shell_item)
+            self.term_menu.append(self.reset_shell_item)
 
             self.win_props = Gtk.MenuItem(t('Window Properties'))
             self.win_props.connect('activate', self.win_prefs)
             self.menu.append(self.win_props)
 
-            self.menu_new = Gtk.MenuItem(t('Save Configuration'))
-            self.menu_new.connect('activate', self.save_conf)
-            self.menu.append(self.menu_new)
+            self.save_configuration = Gtk.MenuItem(t('Save Configuration'))
+            self.save_configuration.connect('activate', self.save_conf)
+            self.menu.append(self.save_configuration)
 
             self.menu_close = Gtk.MenuItem(t('Close'))
             self.menu_close.connect('activate', self.close_node)
@@ -319,9 +319,27 @@ class VteObject(Gtk.VBox):
         elif value:
             Gtk.show_uri(self.get_screen(), value, GdkX11.x11_get_server_time(self.get_window()))
 
-    def save_progname(self, widget):
-        ConfigManager.disable_losefocus_temporary = True
-        ProgDialog(self, self)
+    def change_shell_command_dialog(self, widget):
+        default_shell_command = ''
+        if hasattr(self, 'progname') and self.progname:
+            default_shell_command = self.progname
+
+        dialog = InputDialog(
+            parent=self.get_toplevel(),
+            title=t('Change Shell Command'),
+            label=t('Shell Command:'),
+            entry_text=default_shell_command,
+        )
+        response = dialog.run()
+
+        if response == Gtk.ResponseType.APPLY:
+            new_shell_command = dialog.get_entry_text()
+
+            # TODO: Prevent errors, clean the VTE screen.
+            if os.path.exists(new_shell_command):
+                self.fork_process(new_shell_command)
+
+        dialog.destroy()
 
     def win_prefs(self, widget):
         ConfigManager.disable_losefocus_temporary = True
